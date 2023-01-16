@@ -1,7 +1,7 @@
 ---
 title: "Dummy Push"
 author: "Grace Ochieng"
-date: "`r Sys.Date()`"
+date: ""
 output: 
   html_document: 
     keep_md: yes
