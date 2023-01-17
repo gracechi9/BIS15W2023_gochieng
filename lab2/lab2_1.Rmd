@@ -1,6 +1,7 @@
 ---
 title: "Objects, Classes & NAs"
-date: "`r Sys.Date()`"
+author: "Grace Ochieng"
+date: "2023:16:1"
 output:
   html_document:
     theme: spacelab
@@ -44,6 +45,8 @@ Once an object has been created, you can do things with them.
 ```{r}
 treatment <- 36
 control <- 38
+
+sum(control,treatment)
 ```
 
 Here we make a new object `my_experiment` that is the sum of the treatment and control. Notice that I use `_` and not spaces.  
@@ -54,8 +57,9 @@ my_experiment
 
 ## Nomenclature
 We need to be careful about nomenclature when we write code. R allows us to give almost any name we want to an object, but there are exceptions. For example, we don't want to give a name to an object that is the same as a function in R.  
+
 ```{r eval=FALSE, include=TRUE}
-else <- 12
+else <-12
 ```
 
 We get an error here because `else` is a function in R. You also don't want to give names that might get confused with functions; i.e. you can assign a value to 'mean' but this could become confusing because mean is used as a function.  
@@ -64,18 +68,28 @@ We get an error here because `else` is a function in R. You also don't want to g
 1. Create three new objects, `venom_GT`, `chiron`, and `veyron`. These are the fastest cars in the world. Assign each car to its top speed. The venom_GT can go 270, chiron is 261, and veyron is 268.
 ```{r}
 venom_GT <- 270
+chiron <-261
+veyron<-268
 ```
 
 2. Use arithmetic to calculate the mean top speed for the cars.
 ```{r}
-
+(270+261+268)/3
 ```
 
 3. Use the function `mean()` to calculate the mean top speed for the cars.
 ```{r}
-
+mean(270,261,268)
 ```
-
+```{r}
+mean(venom_GT,chiron,veyron)
+```
+approach that should be used is a vector 
+```{r}
+top_speed<- c(venom_GT,chiron,veyron)
+mean(top_speed)
+```
+run the top speed vector first then afterwards add the mean top speed and run it after you will get a more effecient mean similar to the arithmetic value
 ## Types of Data
 There are five frequently used `classes` of data: 1. numeric, 2. integer, 3. character, 4. logical, 5. complex.
 ```{r}
@@ -95,6 +109,9 @@ You can use the `is()` and `as()` functions to clarify or specify a type of data
 ```{r}
 is.integer(my_numeric) #is my_numeric an integer?
 ```
+```{r}
+is.numeric(my_numeric)
+```
 
 ```{r}
 my_integer <- 
@@ -103,6 +120,14 @@ my_integer <-
 
 ```{r}
 is.integer(my_integer) #is my_numeric an integer?
+```
+```{r}
+practice_integer <- 50L
+practice_integer
+```
+```{r}
+practice_integer<- as.numeric(practice_integer)
+is.integer(practice_integer)
 ```
 
 ## Missing Data
@@ -129,16 +154,20 @@ new_vector <- c(7, 6.2, 5, 9, NA, 4, 9.8, 7, 3, 2)
 
 2. As we did in homework 1, calculate the mean of `new_vector`.
 ```{r}
-
+mean(new_vector)
+```
+```{r}
+is.na(new_vector)
 ```
 
 3. How do you interpret this result? What does this mean about NAs?  
+The results is interpreted does not provide a mean since the presence of NA is not removed and is unknown.NA in our data prevents our code chunk to run
 
 4. Recalculate the mean using the following code chunk. Why is the useful?  
 ```{r}
 mean(new_vector, na.rm=T) #na.rm removes the NA values in the vector
 ```
-
+The fillowing code chunk is more helpful because now when we run it identifies the NA is there and aslo removes it. Now after removing NA it runs the code chunk and the mean is calculated.
 ## That's it! Let's take a break and then move on to part 2!
 
 -->[Home](https://jmledford3115.github.io/datascibiol/)  

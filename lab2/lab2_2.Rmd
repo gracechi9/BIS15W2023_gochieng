@@ -1,6 +1,7 @@
 ---
 title: "Vectors and Data Matrices"
-date: "`r Sys.Date()`"
+author: "Grace Ochieng"
+date: "2023:16:1"
 output:
   html_document:
     theme: spacelab
@@ -51,17 +52,21 @@ Work through these examples and make adjustments to the values to experiment.
 
 1. Evaluate all numerics in `my_vector_sequence` to determine which has a value of 15.  
 ```{r}
-
+my_vector_sequence==15
 ```
 
 2. We can use operators such as <, >, ==, <==, etc. Show all values in `my_vector_sequence` that are less than 10.  How about less than or equal to 10?  
 ```{r}
-
+my_vector_sequence<10
 ```
 
 3. If you use `[]` then you only get the values, not the logical evaluation of the entire vector. Experiment with this by adjusting the chunk below.    
 ```{r}
 my_vector_sequence[my_vector_sequence <= 10]
+```
+
+```{r}
+my_vector_sequence[my_vector_sequence==15]
 ```
 
 ## Data Matrices
@@ -133,7 +138,7 @@ all_harry_potter_matrix
 ## Practice
 1. What are the total earnings for the US and non-US regions?  
 ```{r}
-
+harry_potter_matrix <- rowSums(US)
 ```
 
 2. Add this information to the data matrix. Hint: you are adding a row, not a column.  
