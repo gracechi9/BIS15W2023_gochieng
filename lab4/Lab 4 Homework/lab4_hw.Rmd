@@ -87,23 +87,9 @@ The taxa represented in the homerange data frame
 levels(homerange$taxon)
 ```
 
-
-The homerange data frame
-```{r}
-homerange<- data.frame (homerange)
-homerange
-```
-
-
 Changing to the 'Taxa' data frame
 ```{r}
 taxa <- select(homerange,taxon: species )
-```
-
-'Taxa' data frame
-```{r}
-taxa<- data.frame(taxa)
-taxa
 ```
 
 **5. The variable `taxon` identifies the large, common name groups of the species represented in `homerange`. Make a table the shows the counts for each of these `taxon`.**  
