@@ -1,6 +1,7 @@
 ---
 title: "Pipes, `arrange()`, `mutate()`, and `if_else()`"
-date: "`r Sys.Date()`"
+author:"Grace Ochieng"
+date: "2023:24:1"
 output:
   html_document:
     theme: spacelab
@@ -51,6 +52,17 @@ mammals <- rename(mammals, genus="Genus", wean_mass="wean mass", max_life= "max.
 names(mammals)
 ```
 
+```{r}
+glimpse(mammals)
+```
+Tricks to change to factors 
+we hav characters that can be changed to factors 
+shiftcommandM
+```{r}
+mammals %>% mutate_if(is.character,as.factor)
+```
+
+
 ## Pipes `%>%` 
 In order to start combining `select()`, `filter()`, and other functions efficiently, we need to learn pipes. Pipes feed the output from one function into the input of another function. This helps us keep our code sequential and clean.  
 
@@ -58,11 +70,11 @@ In this example, we use a pipe to select only `lakeid` and `scalelength` then fi
 ```{r}
 filter(fish, lakeid == "AL")
 ```
-
+ony interested in
 ```{r}
 select(fish, lakeid, scalelength)
 ```
-
+but what if i wanted to connect feed one into the other so the first and second step into just one code chunk and chop up data to what we are intrested in
 ```{r}
 fish %>%
   select(lakeid, scalelength) %>%
@@ -79,9 +91,14 @@ mammals %>%
 ## Practice
 1. We are interested in the fish from the lakes "AL" and "AR" with a radii length between 2 and 4. Extract this information from the `fish` data. Use pipes!  
 ```{r}
-
+fish %>%
+  filter(lakeid == "AL"| lakeid == "AR")
+  filter (radii_length_mm>2 & radii_length_mm<=4)
 ```
 
+  
+  check the one above 
+  
 ## `arrange()`
 The `arrange()` command is a bit like a sort command in excel. Note that the default is ascending order.  
 ```{r}
@@ -108,7 +125,10 @@ fish %>%
 ## Practice
 1. We are interested in the radii length and scalelength of fish with the id `300`. Extract this information from the `fish` data. Please sort the data by radii length.
 ```{r}
-
+fish %>%
+  filter (fish_id =="300") %>% 
+  select(radii_length_mm,fish_id) %>% 
+arrange(radii_length_mm)
 ```
 
 ## `mutate()`  
@@ -126,13 +146,13 @@ Here is an example that changes all entries to lowercase (if present).
 ```{r}
 mammals
 ```
-
+to change all the column nams to lowercase
 ```{r}
 mammals %>%
   mutate_all(tolower)
 ```
 
-Using the across function we can specify individual columns.
+Using the across function we can specify individual columns. that we might want to get to lowercase
 ```{r}
 mammals %>% 
   mutate(across(c("order", "family"), tolower))
@@ -147,7 +167,7 @@ mammals %>%
   select(genus, species, newborn) %>% 
   arrange(newborn)
 ```
-
+make a new column and if its in the new born there is a -999 put na if not -99 keep the oldvalue
 ```{r}
 mammals %>% 
   select(genus, species, newborn) %>%
@@ -158,14 +178,18 @@ mammals %>%
 ## Practice
 1. Use `mutate()` to make a new column that is the half length of each fish: length_half = length/2. Select only fish_id, length, and length_half.
 ```{r}
-
+fish %>% 
+  mutate(length_half=length/2) %>% 
+  arrange(length_half,fish_id,length)
 ```
 
 2. We are interested in the family, genus, species and max life variables. Because the max life span for several mammals is unknown, the authors have use -999 in place of NA. Replace all of these values with NA in a new column titled `max_life_new`. Finally, sort the date in descending order by max_life_new. Which mammal has the oldest known life span?
 ```{r}
 
 ```
-
+ check the one above 
 ## That's it! Let's take a break and then move on to part 2! 
+
+
 
 -->[Home](https://jmledford3115.github.io/datascibiol/)  
