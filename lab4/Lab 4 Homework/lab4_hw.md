@@ -7102,7 +7102,7 @@ taxa
 Table for Common name 
 
 ```r
-table(homerange$common.name)
+table (homerange$common.name)
 ```
 
 ```
