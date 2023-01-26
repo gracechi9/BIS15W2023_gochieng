@@ -1,12 +1,13 @@
 ---
 title: "dplyr Superhero"
-author:"Grace Ochieng"
+author: "Grace Ochieng"
 date: "2023:24:1"
 output:
-  html_document:
+  html_document: 
     theme: spacelab
     toc: yes
     toc_float: yes
+    keep_md: yes
 ---
 
 ## Learning Goals  
@@ -36,22 +37,11 @@ removed a lot of the problems
 ```{r}
 names(superhero_info)
 ```
+
 ```{r}
-superhero_info <- rename 
-(superhero_info,  
-  name="name", 
-  gender="Gender", 
-  eye_color= "Eye color",,
-  race="Race",
-  hair_color="Hair color",
-  height="Height",
-  publisher="Publisher",
-  skin_color="Skin color",
-  aligment="Aligment",
-  weight="Weight" )
+superhero_info <- rename(superhero_info, name="name", gender="Gender", eye_color= "Eye color", race="Race", hair_color="Hair color", height="Height", publisher="Publisher", skin_color="Skin color", alignment="Alignment", weight="Weight")
 ```
- Check the one abve
- 
+
 Yikes! `superhero_powers` has a lot of variables that are poorly named. We need some R superpowers...
 ```{r}
 head(superhero_powers)
@@ -59,8 +49,8 @@ head(superhero_powers)
 
 ## `janitor`
 The [janitor](https://garthtarr.github.io/meatR/janitor.html) package is your friend. Make sure to install it and then load the library.  
-```{r}
-library("janitor")
+```{r message=FALSE, warning=FALSE} 
+library ("janitor")
 ```
 
 The `clean_names` function takes care of everything in one line! Now that's a superpower!
@@ -81,7 +71,7 @@ superhero_info
 ```
 
 2. Notice that we have some neutral superheros! Who are they?
-we find the names of the netral superhros 
+we find the names of the 
 ```{r}
 superhero_info %>% 
   filter(race=="Human")
@@ -90,65 +80,92 @@ superhero_info %>%
 ## `superhero_info`
 3. Let's say we are only interested in the variables name, alignment, and "race". How would you isolate these variables from `superhero_info`?
 ```{r}
-superhero_info %>%
-  filter(race!= "Human")
+superhero_info %>% 
+  select(alignment, race)
 ```
 
 ## Not Human
 4. List all of the superheros that are not human.
 ```{r}
-
+superhero_info %>%
+  filter(race!= "Human")
 ```
 
-## Good and Evil
+## Good and Evil(check this question)
 5. Let's make two different data frames, one focused on the "good guys" and another focused on the "bad guys".
-```{r}
-
-```
+Good Guys dataframe
 
 ```{r}
-
+alignment_category<- select (superhero_info,"name", "hair_color", "race", "alignment","height", "weight")
+good_guys <- filter(alignment_category, alignment =="good")
+good_guys
 ```
+Bad Guys Data frame
+```{r}
+alignment_category<- select (superhero_info, "name", "hair_color", "race", "alignment","height")
+bad_guys <-filter (alignment_category, alignment =="bad")
+bad_guys
+```
+
 
 6. For the good guys, use the `tabyl` function to summarize their "race".
 ```{r}
+#tabyl(good_guys, race)
+good_guys
 
 ```
 
 7. Among the good guys, Who are the Asgardians?
 ```{r}
-
+filter(good_guys, race =="Asgardian")
 ```
 
 8. Among the bad guys, who are the male humans over 200 inches in height?
 ```{r}
-
+filter(bad_guys, height>=200 )
 ```
 
 9. OK, so are there more good guys or bad guys that are bald (personal interest)?
 ```{r}
-
+ bad_guys %>%
+  select(name, hair_color,race) %>%
+  filter(hair_color == "No Hair") 
+```
+```{r}
+good_guys %>%
+  select(name, hair_color,race) %>%
+  filter(hair_color == "No Hair")
 ```
 
 10. Let's explore who the really "big" superheros are. In the `superhero_info` data, which have a height over 200 or weight greater than or equal to 450?
 ```{r}
-
+superhero_info %>%
+  select(name, height,weight) %>%
+  filter(height >300 | weight>=450 )
 ```
 
 11. Just to be clear on the `|` operator,  have a look at the superheros over 300 in height...
 ```{r}
-
+superhero_info %>%
+  select(name, height,weight) %>%
+  filter(height>300)
 ```
 
 12. ...and the superheros over 450 in weight. Bonus question! Why do we not have 16 rows in question #10?
 ```{r}
-
+superhero_info %>%
+  select(name, height,weight) %>%
+  filter(weight>=450)
 ```
-
+  
+We don't have 16 rows in total in comparison to the first because in the first code we ran it asks for or in this function as long as one of the variables meets the criteria we are searching for it will show up. However, according to the second and third code it asks specifically for weight being a specific numeric and the other similarly only asks for height.
+ 
 ## Height to Weight Ratio
 13. It's easy to be strong when you are heavy and tall, but who is heavy and short? Which superheros have the highest height to weight ratio?
 ```{r}
-
+superhero_info %>%
+  select(name, height,weight) %>%
+  filter(height<100 & weight>450 )
 ```
 
 ## `superhero_powers`
@@ -159,14 +176,19 @@ glimpse(superhero_powers)
 
 14. How many superheros have a combination of accelerated healing, durability, and super strength?
 ```{r}
-
+superhero_powers %>% 
+  select(hero_names, accelerated_healing, durability,super_strength) %>% 
+  filter(accelerated_healing=="TRUE" & durability=="TRUE" & super_strength=="TRUE")
 ```
+97 Heros have a combination of the three traits 
 
 ## Your Favorite
 15. Pick your favorite superhero and let's see their powers!
+
 ```{r}
-
+superhero_powers %>%
+  filter(hero_names=="Silver Surfer") %>% 
+  select_if(all_vars(.=="TRUE"))
 ```
-
 ## Push your final code to GitHub!
 Please be sure that you check the `keep md` file in the knit preferences.  
