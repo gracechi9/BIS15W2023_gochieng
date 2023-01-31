@@ -1,0 +1,887 @@
+---
+title: "Homeworks and Notes"
+author: "Grace Ochieng"
+date: "2023-01-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+hello graca and welcome to your cheet sheet step one as always is to download the tidyverse and how you do this is by using the function 
+```{r message=FALSE, warning=FALSE}
+library("tidyverse")
+```
+at times you are asked to load other various libraries
+## Load the libraries
+```{r message=FALSE, warning=FALSE}
+library("tidyverse")
+library("janitor")
+library("skimr")
+library("palmerpenguins")
+```
+depending on what is asked remeber that these are imprtant jantor helps rename and tidy verse is good for r studio and essential
+
+another essential thing to check your working directory is using:
+Run the following code by clicking the small green arrow to check your current working directory.  
+```{r}
+getwd()
+```
+
+## Nomenclature 
+**1 What is the difference between R and RStudio? What is GitHub and why is it useful to programmers?**  
+RStudio is a GUI that allows working in R to be easier. 
+Gifthub is the place where programmers can collaborate on software projects store and create code files 
+
+Gifthub.com - is a file storage and management site used by programmers. Programmers upload code to repositories (folders) and make it publicly available.
+
+Github desktop - The easiest way to manage your GitHub repository is to use this and it  is a  helpful tool that will allow you to manage all of your files. 
+
+Code chunks - All R code is inserted between two gray bars called a code chunk. You can insert a new code chunk by clicking "Insert>R" at the top of the page. On a Mac, the shortcut is `option+command+i`.  
+
+R Markdown- it allows us to embed code in annotated chunks, show the results of analyses, and display graphical output all in one file. It is a great way of making a report which can be conveniently output to html or pdf.
+
+RStudio - is a [GUI](https://www.computerhope.com/jargon/g/gui.htm) that is used to interact with R.
+
+R - it is an open source scripting language, R is a scripting language you don't point and click to run commands. Instead, you write instructions that are used by the computer to complete an operation. 
+
+## Homework One 
+This homework was just the basic introduction of the course 
+
+**4. Calculate the following expressions. Be sure to include each one in a separate code chunk.**  
+```{r}
++ 5 - 3 * 2 
+```
+
+```{r}
++ 8 / 2 ** 2  
+```
+  
+**5. Did any of the results in #4 surprise you? Write two programs that calculate each expression such that the result for the first example is 4 and the second example is 16.**    
+None of the results in number four surprised me. The problems used the same arithmetic principles that a person not using r would.
+```{r}
++16/2**2
+```
+```{r}
++20 -2 * 2
+```
+
+**6. `Objects` in R are a way in which we can store data or operations. We will talk more about objects next week. For now, make a new object `pi` as 3.14159265359 by running the following code chunk. You should now see the object `pi` in the environment window in the top right.**  
+```{r}
+pi <- 3.14159265359
+```
+
+**7. Let's say we want to multiply `pi` by 2. Using the same arithmetic principles that we just learned, write a code chunk that performs this operation using the object we created.**  
+
+```{r}
+pi*2
+```
+
+
+**8. In order to get help with any command in R, just type a `?` in front the command of interest. Practice this by running the following code chunk.**  
+```{r}
+?mean
+```
+```{r}
+mean(pi)
+```
+
+**9. Let's calculate the mean for the numbers 2, 8, 6, 4, 9, 10. I have built an object `x` for you below so all you need to do is run the first code chunk and then create a second code chunk that shows the calculation. Give it a try!**  
+```{r}
+x <- c(2, 8, 6, 6, 7, 4, 9, 9, 9, 10)
+```
+```{r}
+mean(x)
+```
+
+**10. Repeat the procedure above, but this time calculate the median.**  
+```{r}
+median(x)
+```
+
+
+## Nomenclature
+
+Data Matrix in R- a data matrix in R can be seen as data tables in the sence that they are a series of stacked vectors 
+
+Objects- Assign a value to object 'x'. The '<-' symbol is read as 'gets'.
+
+[row, column]
+
+Vectors - Vectors are a common way of organizing data in R.  We create vectors using the `c` command. The `c` stands for concatenate. 
+
+
+
+
+## Homework 2 
+
+1. What is a vector in R?  
+a vector in R is a way to organise data. For instance in a mean it identifies all values such as the decimal values and calculates a more accurate mean. In vectors we use concatenate as c and then place our values to get a more organised version of our data.
+ for example;
+```{r}
+Gol<- 20.7
+Di<-30.8
+Locks<-10.2
+
+```
+```{r}
+total_earnings<-c(Gol,Di,Locks)
+mean(total_earnings)
+```
+ 
+3. Below are data collected by three scientists (Jill, Steve, Susan in order) measuring temperatures of eight hot springs. Run this code chunk to create the vectors.  
+```{r}
+spring_1 <- c(36.25, 35.40, 35.30)
+spring_2 <- c(35.15, 35.35, 33.35)
+spring_3 <- c(30.70, 29.65, 29.20)
+spring_4 <- c(39.70, 40.05, 38.65)
+spring_5 <- c(31.85, 31.40, 29.30)
+spring_6 <- c(30.20, 30.65, 29.75)
+spring_7 <- c(32.90, 32.50, 32.80)
+spring_8 <- c(36.80, 36.45, 33.15)
+```
+
+4. Build a data matrix that has the springs as rows and the columns as scientists.  
+```{r}
+temperature<-c(spring_1,spring_2,spring_3,spring_4,spring_5,spring_6,spring_7,spring_8)
+temperature
+```
+```{r}
+data_collected_matrix<- matrix(temperature, nrow = 8, byrow = T)
+data_collected_matrix
+```
+
+5. The names of the springs are 1.Bluebell Spring, 2.Opal Spring, 3.Riverside Spring, 4.Too Hot Spring, 5.Mystery Spring, 6.Emerald Spring, 7.Black Spring, 8.Pearl Spring. Name the rows and columns in the data matrix. Start by making two new vectors with the names, then use `colnames()` and `rownames()` to name the columns and rows.
+
+```{r}
+scientists <- c("Jill", "Steve","Susan")
+scientists
+```
+
+```{r}
+spring_names<-c("Bluebell Spring","Opal Spring","Riverside Spring","Too Hot Spring","Mystery Spring","Emerald Spring","Black Spring","Pearl Spring")
+spring_names
+```
+
+```{r}
+colnames(data_collected_matrix) <- scientists
+```
+
+```{r}
+rownames(data_collected_matrix) <- spring_names
+```
+
+The matrix created.
+
+```{r}
+data_collected_matrix
+```
+
+6. Calculate the mean temperature of all eight springs.
+```{r}
+total_data <- rowSums(data_collected_matrix)
+total_data
+```
+The calculated mean temperature
+```{r}
+springs_temperature <-c(total_data)
+mean(springs_temperature)
+```
+
+7. Add this as a new column in the data matrix.  
+```{r}
+all_data_collected_matrix <- cbind(data_collected_matrix,total_data)
+all_data_collected_matrix
+```
+
+8. Show Susan's value for Opal Spring only.
+```{r}
+data_collected_matrix[2,3]
+```
+
+9. Calculate the mean for Jill's column only.  
+```{r}
+jill <- all_data_collected_matrix[,1]
+mean(jill)
+```
+
+10. Use the data matrix to perform one calculation or operation of your interest.
+I would like to calculate the mean on all the total data the scientists collected
+```{r}
+total_data<- all_data_collected_matrix[,4]
+mean(total_data)
+```
+
+## Nomenclature 
+
+Data Frames- organize the vectors into a new type of data structure called a **data frame**. The data frame is the most common way to organize data within R. You can think of a data frame as similar to a spreadsheet. A data frame can store data of many different classes.  
+ Summary Functions for data frames and tables- 
+ 
+## Summary functions
+Once data have been uploaded, you may want to get an idea of its structure, contents, and dimensions. I routinely run one or more of these commands when data are first imported.  
+
+We can summarize our data frame with the`summary()` function.  
+```{r}
+summary(fish)
+```
+
+`glimpse()` is another useful summary function.
+```{r}
+glimpse(fish)
+```
+
+`nrow()` gives the numbers of rows.
+```{r}
+nrow(fish) #the number of rows or observations
+```
+
+`ncol` gives the number of columns.
+```{r}
+ncol(fish) #the number of columns or variables
+```
+
+`dim()` gives the dimensions.
+```{r}
+dim(fish) #total dimensions
+```
+
+`names` gives the column names.
+```{r}
+names(fish) #column names
+```
+
+`head()` prints the first n rows of the data frame.
+```{r}
+head(fish, n = 10)
+```
+
+`tail()` prinst the last n rows of the data frame.
+```{r}
+tail(fish, n = 10)
+```
+
+`table()` is useful when you have a limited number of categorical variables. It produces fast counts of the number of observations in a variable. We will come back to this later... 
+```{r}
+table(fish$lakeid)
+```
+
+We can also click on the `fish` data frame in the Environment tab or type View(fish).
+```{r}
+#View(fish)
+```
+##Homework 3 
+## Load the tidyverse
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+## Mammals Sleep
+1. For this assignment, we are going to use built-in data on mammal sleep patterns. From which publication are these data taken from? Since the data are built-in you can use the help function in R.
+```{r}
+help("data/mammals_sleep_allison_cicchetti_1976.csv")
+```
+```{r}
+getwd()
+```
+
+2. Store these data into a new data frame `sleep`.
+```{r}
+sleep <- readr::read_csv("data/mammals_sleep_allison_cicchetti_1976.csv")
+```
+
+3. What are the dimensions of this data frame (variables and observations)? How do you know? Please show the *code* that you used to determine this below.  
+```{r}
+dim(sleep)
+```
+
+4. Are there any NAs in the data? How did you determine this? Please show your code.  
+
+```{r}
+anyNA(sleep)
+```
+
+5. Show a list of the column names is this data frame.
+```{r}
+names(sleep)
+```
+```{r}
+str(sleep)
+```
+
+6. How many herbivores are represented in the data?  
+```{r}
+table(sleep$species)
+```
+
+7. We are interested in two groups; small and large mammals. Let's define small as less than or equal to 1kg body weight and large as greater than or equal to 200kg body weight. Make two new dataframes (large and small) based on these parameters.
+```{r}
+small_mammals<-filter(msleep, bodywt<=1)
+small_mammals
+```
+```{r}
+large_mammals<-filter(msleep,bodywt <=200) 
+large_mammals
+```
+
+8. What is the mean weight for both the small and large mammals?
+```{r}
+w <- small_mammals$bodywt
+mean(w)
+```
+```{r}
+w <- large_mammals$bodywt
+mean(w)
+```
+
+9. Using a similar approach as above, do large or small animals sleep longer on average?  
+```{r}
+w <- large_mammals$sleep_total
+mean(w)
+```
+
+```{r}
+w <- small_mammals$sleep_total
+mean(w)
+```
+The smaller mammals sleep longer than average
+
+10. Which animal is the sleepiest among the entire dataframe?
+```{r}
+max(msleep$sleep_total)
+
+```
+
+Writing Data to File
+```{r}
+write.csv(sleep, "mammals_sleep_allison_cicchetti_1976.csv", row.names = FALSE)
+```
+
+## Nomenclature
+
+Select- Select allows you to pull out columns of interest from a dataframe.
+
+Filter- filter()` allows us to extract data that meet specific criteria within a variable. Let's say that we are interested only in the fish that occur in lake "AL". We can use `filter()` to extract these observations. 
+
+Diplys- `dplyr` is used to transform data frames by extracting, rearranging, and summarizing data such that they are focused on a question of interest. This is very helpful,  especially when wrangling large data, and makes dplyr one of most frequently used packages in the tidyverse
+
+Conditions of filter.
+Rules:  
++ `filter(condition1, condition2)` will return rows where both conditions are met.  
++ `filter(condition1, !condition2)` will return all rows where condition one is true but condition 2 is not.  
++ `filter(condition1 | condition2)` will return rows where condition 1 or condition 2 is met.  
++ `filter(xor(condition1, condition2)` will return all rows where only one of the conditions is met, and not when both conditions are met.
+
+## Lab 4 Homework
+
+
+## Load the tidyverse
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+## Data
+For the homework, we will use data about vertebrate home range sizes. The data are in the class folder, but the reference is below.  
+
+**Database of vertebrate home range sizes.**  
+Reference: Tamburello N, Cote IM, Dulvy NK (2015) Energy and the scaling of animal space use. The American Naturalist 186(2):196-211. http://dx.doi.org/10.1086/682070.  
+Data: http://datadryad.org/resource/doi:10.5061/dryad.q5j65/1  
+
+**1. Load the data into a new object called `homerange`.**
+
+```{r}
+homerange <- readr::read_csv("data/Tamburelloetal_HomerangeDatabase.csv")
+```
+
+**2. Explore the data. Show the dimensions, column names, classes for each variable, and a statistical summary. Keep these as separate code chunks.**  
+
+Dimensions 
+```{r}
+dim(homerange)
+```
+
+Column names
+```{r}
+names(homerange)
+```
+
+Statstitical summary this also showes the class for each variable
+```{r}
+summary (homerange)
+```
+
+**3. Change the class of the variables `taxon` and `order` to factors and display their levels.**  
+
+Part one- Taxon
+Variable of Taxon changed to factor
+```{r}
+class(homerange$taxon)
+```
+```{r}
+homerange$taxon <-as.factor(homerange$taxon)
+class(homerange$taxon)
+```
+
+Levels of Taxon
+```{r}
+levels(homerange$taxon)
+```
+ 
+Part Two- order
+Variable of 'order' changed to factor
+```{r}
+homerange$order <-as.factor(homerange$order)
+class(homerange$order)
+```
+ Levels of order
+```{r}
+levels(homerange$order)
+```
+ 
+**4. What taxa are represented in the `homerange` data frame? Make a new data frame `taxa` that is restricted to taxon, common name, class, order, family, genus, species.** 
+
+The taxa represented in the homerange data frame 
+```{r}
+levels(homerange$taxon)
+```
+
+Changing to the 'Taxa' data frame
+```{r}
+taxa <- select(homerange,taxon: species )
+```
+
+**5. The variable `taxon` identifies the large, common name groups of the species represented in `homerange`. Make a table the shows the counts for each of these `taxon`.**  
+
+Table for Common name 
+```{r}
+table (homerange$common.name)
+```
+
+**6. The species in `homerange` are also classified into trophic guilds. How many species are represented in each trophic guild.**  
+
+```{r}
+table(homerange$trophic.guild)
+```
+
+**7. Make two new data frames, one which is restricted to carnivores and another that is restricted to herbivores.**  
+
+Code chunk only restricted for carnivores data frame
+```{r}
+carnivore.animals <-filter(homerange, trophic.guild == "carnivore")
+```
+
+Data frame for carivores 
+```{r}
+filter(homerange, trophic.guild == "carnivore")
+```
+
+Code chunk only restricted for herbivores data frame
+```{r}
+herbivore.animals <-filter(homerange, trophic.guild == "herbivore")
+```
+
+Data for herbivores
+```{r}
+filter(homerange, trophic.guild == "herbivore")
+```
+
+**8. Do herbivores or carnivores have, on average, a larger `mean.hra.m2`? Remove any NAs from the data.**  
+Herbivore
+```{r}
+mean(herbivore.animals$mean.hra.m2, na.rm=T)
+```
+
+Carnivore
+```{r}
+mean(carnivore.animals$mean.hra.m2, na.rm=T)
+```
+In comparison herbivores have a larger mean, 'mean.hra.m2'
+ 
+**9. Make a new dataframe `deer` that is limited to the mean mass, log10 mass, family, genus, and species of deer in the database. The family for deer is cervidae. Arrange the data in descending order by log10 mass. Which is the largest deer? What is its common name?**  
+
+
+```{r}
+deer <-select (homerange, "log10.mass", "family", "genus", "mean.mass.g")
+deer.cervidae <-filter (deer, family =="cervidae")
+deer.cervidae
+```
+
+```{r}
+arrange (deer.cervidae, log10.mass)
+```
+The largest deer is the Alcels and its common name is the moose
+
+**10. As measured by the data, which snake species has the smallest homerange? Show all of your work, please. Look this species up online and tell me about it!** **Snake is found in taxon column**   
+
+Now we create a new data set for the viperidae family which are the snakes  
+```{r}
+snake <-select (homerange, "log10.mass", "family", "genus", "mean.hra.m2")
+```
+
+```{r}
+snake.x <-filter (deer, family =="viperidae")
+snake.x
+```
+
+```{r}
+arrange (snake.x, log10.mass)
+```
+
+The smallest snake is the bitis are commonly known as African adders. It is venomous and commonly found in west and central regions of the African continent.
+
+## Nomenclature 
+
+Pipes- Pipes feed the output from one function into the input of another function. This helps us keep our code sequential and clean.  made by command+shift+m
+
+Arrange - The `arrange()` command is a bit like a sort command in excel. Note that the default is ascending order.  
+
+Mutate - Mutate allows us to create a new column from existing columns in a data frame.
+
+Mutate_all- his last function is super helpful when cleaning data. With "wild" data, there are often mixed entries (upper and lowercase), blank spaces, odd characters, etc.
+
+If_ else- `if_else()`, you first specify a logical statement, afterwards what needs to happen if the statement returns `TRUE`, and lastly what needs to happen if it's  `FALSE`.
+ just an example 
+ 1. Use `mutate()` to make a new column that is the half length of each fish: length_half = length/2. Select only fish_id, length, and length_half.
+```{r}
+fish %>% 
+  mutate(length_half=length/2) %>% 
+  arrange(length_half,fish_id,length)
+```
+
+## `janitor`
+The [janitor](https://garthtarr.github.io/meatR/janitor.html) package is your friend. Make sure to install it and then load the library.  
+```{r message=FALSE, warning=FALSE} 
+library ("janitor")
+```
+
+The `clean_names` function takes care of everything in one line! Now that's a superpower!
+```{r}
+superhero_powers <- 
+  janitor::clean_names(superhero_powers)
+superhero_powers
+```
+
+
+## Homework 5 
+## Load the tidyverse
+```{r}
+library("tidyverse")
+```
+
+## Load the superhero data
+These are data taken from comic books and assembled by fans. The include a good mix of categorical and continuous data.  Data taken from: https://www.kaggle.com/claudiodavi/superhero-set  
+
+Check out the way I am loading these data. If I know there are NAs, I can take care of them at the beginning. But, we should do this very cautiously. At times it is better to keep the original columns and data intact.  
+```{r}
+superhero_info <- readr::read_csv("data/heroes_information.csv", na = c("", "-99", "-"))
+superhero_powers <- readr::read_csv("data/super_hero_powers.csv", na = c("", "-99", "-"))
+```
+removed a lot of the problems
+## Data tidy
+1. Some of the names used in the `superhero_info` data are problematic so you should rename them here.  
+```{r}
+names(superhero_info)
+```
+
+```{r}
+superhero_info <- rename(superhero_info, name="name", gender="Gender", eye_color= "Eye color", race="Race", hair_color="Hair color", height="Height", publisher="Publisher", skin_color="Skin color", alignment="Alignment", weight="Weight")
+```
+
+Yikes! `superhero_powers` has a lot of variables that are poorly named. We need some R superpowers...
+```{r}
+head(superhero_powers)
+```
+
+## `janitor`
+The [janitor](https://garthtarr.github.io/meatR/janitor.html) package is your friend. Make sure to install it and then load the library.  
+```{r message=FALSE, warning=FALSE} 
+library ("janitor")
+```
+
+The `clean_names` function takes care of everything in one line! Now that's a superpower!
+```{r}
+superhero_powers <- 
+  janitor::clean_names(superhero_powers)
+superhero_powers
+```
+
+## `tabyl`
+The `janitor` package has many awesome functions that we will explore. Here is its version of `table` which not only produces counts but also percentages. Very handy! Let's use it to explore the proportion of good guys and bad guys in the `superhero_info` data.  
+
+```{r}
+#tabyl(superhero_info, alignment)
+superhero_info
+```
+
+2. Notice that we have some neutral superheros! Who are they?
+we find the names of the 
+```{r}
+superhero_info %>% 
+  filter(race=="Human")
+```
+
+## `superhero_info`
+3. Let's say we are only interested in the variables name, alignment, and "race". How would you isolate these variables from `superhero_info`?
+```{r}
+superhero_info %>% 
+  select(alignment, race)
+```
+
+## Not Human
+4. List all of the superheros that are not human.
+```{r}
+superhero_info %>%
+  filter(race!= "Human")
+```
+
+## Good and Evil(check this question)
+5. Let's make two different data frames, one focused on the "good guys" and another focused on the "bad guys".
+Good Guys dataframe
+
+```{r}
+alignment_category<- select (superhero_info,"name", "hair_color", "race", "alignment","height", "weight")
+good_guys <- filter(alignment_category, alignment =="good")
+good_guys
+```
+Bad Guys Data frame
+```{r}
+alignment_category<- select (superhero_info, "name", "hair_color", "race", "alignment","height")
+bad_guys <-filter (alignment_category, alignment =="bad")
+bad_guys
+```
+
+
+6. For the good guys, use the `tabyl` function to summarize their "race".
+```{r}
+#tabyl(good_guys, race)
+good_guys
+
+```
+
+7. Among the good guys, Who are the Asgardians?
+```{r}
+filter(good_guys, race =="Asgardian")
+```
+
+8. Among the bad guys, who are the male humans over 200 inches in height?
+```{r}
+filter(bad_guys, height>=200 )
+```
+
+9. OK, so are there more good guys or bad guys that are bald (personal interest)?
+```{r}
+ bad_guys %>%
+  select(name, hair_color,race) %>%
+  filter(hair_color == "No Hair") 
+```
+```{r}
+good_guys %>%
+  select(name, hair_color,race) %>%
+  filter(hair_color == "No Hair")
+```
+
+10. Let's explore who the really "big" superheros are. In the `superhero_info` data, which have a height over 200 or weight greater than or equal to 450?
+```{r}
+superhero_info %>%
+  select(name, height,weight) %>%
+  filter(height >300 | weight>=450 )
+```
+
+11. Just to be clear on the `|` operator,  have a look at the superheros over 300 in height...
+```{r}
+superhero_info %>%
+  select(name, height,weight) %>%
+  filter(height>300)
+```
+
+12. ...and the superheros over 450 in weight. Bonus question! Why do we not have 16 rows in question #10?
+```{r}
+superhero_info %>%
+  select(name, height,weight) %>%
+  filter(weight>=450)
+```
+  
+We don't have 16 rows in total in comparison to the first because in the first code we ran it asks for or in this function as long as one of the variables meets the criteria we are searching for it will show up. However, according to the second and third code it asks specifically for weight being a specific numeric and the other similarly only asks for height.
+ 
+## Height to Weight Ratio
+13. It's easy to be strong when you are heavy and tall, but who is heavy and short? Which superheros have the highest height to weight ratio?
+```{r}
+superhero_info %>%
+  select(name, height,weight) %>%
+  filter(height<100 & weight>450 )
+```
+
+## `superhero_powers`
+Have a quick look at the `superhero_powers` data frame.  
+```{r}
+glimpse(superhero_powers)
+```
+
+14. How many superheros have a combination of accelerated healing, durability, and super strength?
+```{r}
+superhero_powers %>% 
+  select(hero_names, accelerated_healing, durability,super_strength) %>% 
+  filter(accelerated_healing=="TRUE" & durability=="TRUE" & super_strength=="TRUE")
+```
+97 Heros have a combination of the three traits 
+
+## Your Favorite
+15. Pick your favorite superhero and let's see their powers!
+
+```{r}
+superhero_powers %>%
+  filter(hero_names=="Silver Surfer") %>% 
+  select_if(all_vars(.=="TRUE"))
+```
+
+## Nomenclature 
+
+## trick to clean out data 
+Check out the way I am loading these data. If I know there are NAs, I can take care of them at the beginning. But, we should do this very cautiously. At times it is better to keep the original columns and data intact.  
+```{r}
+superhero_info <- readr::read_csv("data/heroes_information.csv", na = c("", "-99", "-"))
+superhero_powers <- readr::read_csv("data/super_hero_powers.csv", na = c("", "-99", "-"))
+```
+removed a lot of the problems
+
+across- `across()` which is designed to work across multiple variables.
+
+group_by- The `summarize()` function is most useful when used in conjunction with `group_by()`
+
+## Homework 6 
+
+
+
+
+## Midterm One Previous class
+
+## Instructions
+Answer the following questions and complete the exercises in RMarkdown. Please embed all of your code and push your final work to your repository. Your code should be organized, clean, and run free from errors. Remember, you must remove the `#` for any included code chunks to run. Be sure to add your name to the author header above. You may use any resources to answer these questions (including each other), but you may not post questions to Open Stacks or external help sites. There are 15 total questions, each is worth 2 points.  
+
+Make sure to use the formatting conventions of RMarkdown to make your report neat and clean!  
+
+## Load the tidyverse
+If you plan to use any other libraries to complete this assignment then you should load them here.
+```{r}
+library(tidyverse)
+library(janitor)
+```
+
+## Questions  
+
+Wikipedia's definition of [data science](https://en.wikipedia.org/wiki/Data_science): "Data science is an interdisciplinary field that uses scientific methods, processes, algorithms and systems to extract knowledge and insights from noisy, structured and unstructured data, and apply knowledge and actionable insights from data across a broad range of application domains."  
+
+1. (2 points) Consider the definition of data science above. Although we are only part-way through the quarter, what specific elements of data science do you feel we have practiced? Provide at least one specific example.  
+
+2. (2 points) What is the most helpful or interesting thing you have learned so far in BIS 15L? What is something that you think needs more work or practice?  
+
+In the midterm 1 folder there is a second folder called `data`. Inside the `data` folder, there is a .csv file called `ElephantsMF`. These data are from Phyllis Lee, Stirling University, and are related to Lee, P., et al. (2013), "Enduring consequences of early experiences: 40-year effects on survival and success among African elephants (Loxodonta africana)," Biology Letters, 9: 20130011. [kaggle](https://www.kaggle.com/mostafaelseidy/elephantsmf).  
+
+3. (2 points) Please load these data as a new object called `elephants`. Use the function(s) of your choice to get an idea of the structure of the data. Be sure to show the class of each variable.
+```{r}
+elephants <- readr::read_csv(file="data/ElephantsMF.csv")
+```
+
+```{r}
+glimpse(elephants)
+```
+
+4. (2 points) Change the names of the variables to lower case and change the class of the variable `sex` to a factor.
+```{r}
+elephants <- janitor::clean_names(elephants)
+```
+
+```{r}
+elephants$sex <- as.factor(elephants$sex)
+```
+
+5. (2 points) How many male and female elephants are represented in the data?
+```{r}
+elephants %>% 
+  count(sex)
+```
+
+6. (2 points) What is the average age all elephants in the data?
+```{r}
+elephants %>% 
+  summarize(mean_age=mean(age))
+```
+
+7. (2 points) How does the average age and height of elephants compare by sex?
+```{r}
+elephants %>% 
+  group_by(sex) %>% 
+  summarise(mean_age=mean(age),
+            mean_height=mean(height))
+```
+
+8. (2 points) How does the average height of elephants compare by sex for individuals over 20 years old. Include the min and max height as well as the number of individuals in the sample as part of your analysis.  
+```{r}
+elephants %>% 
+  filter(age>20) %>% 
+  group_by(sex) %>% 
+  summarise(min_height=min(height),
+            max_height=max(height),
+            mean_height=mean(height),
+            n_elephants=n())
+```
+
+For the next series of questions, we will use data from a study on vertebrate community composition and impacts from defaunation in [Gabon, Africa](https://en.wikipedia.org/wiki/Gabon). One thing to notice is that the data include 24 separate transects. Each transect represents a path through different forest management areas.  
+
+Reference: Koerner SE, Poulsen JR, Blanchard EJ, Okouyi J, Clark CJ. Vertebrate community composition and diversity declines along a defaunation gradient radiating from rural villages in Gabon. _Journal of Applied Ecology_. 2016. This paper, along with a description of the variables is included inside the midterm 1 folder.  
+
+9. (2 points) Load `IvindoData_DryadVersion.csv` and use the function(s) of your choice to get an idea of the overall structure. Change the variables `HuntCat` and `LandUse` to factors.
+```{r}
+gabon <- readr::read_csv("data/IvindoData_DryadVersion.csv")
+```
+
+```{r}
+gabon <- gabon %>% 
+  mutate_if(is.character, factor)
+```
+
+10. (4 points) For the transects with high and moderate hunting intensity, how does the average diversity of birds and mammals compare?
+```{r}
+gabon %>% 
+  filter(HuntCat=="High") %>% 
+  summarise(mean_bird_diversity=mean(Diversity_BirdSpecies),
+            mean_mammal_diversity=mean(Diversity_MammalSpecies),
+            nsamples=n())
+```
+
+```{r}
+gabon %>% 
+  filter(HuntCat=="Moderate") %>% 
+  summarise(mean_bird_diversity=mean(Diversity_BirdSpecies),
+            mean_mammal_diversity=mean(Diversity_MammalSpecies),
+            nsamples=n())
+```
+
+```{r}
+names(gabon)
+```
+
+11. (4 points) One of the conclusions in the study is that the relative abundance of animals drops off the closer you get to a village. Let's try to reconstruct this (without the statistics). How does the relative abundance (RA) of apes, birds, elephants, monkeys, rodents, and ungulates compare between sites that are less than 3km from a village to sites that are greater than 25km from a village? The variable `Distance` measures the distance of the transect from the nearest village. Hint: try using the `across` operator.  
+
+Close
+```{r}
+gabon %>% 
+  filter(Distance<3) %>% 
+  summarise(across(contains("RA_"), mean))
+```
+
+Far
+```{r}
+gabon %>% 
+  filter(Distance>25) %>% 
+  summarise(across(contains("RA_"), mean))
+```
+
+
+
+
+
+
+

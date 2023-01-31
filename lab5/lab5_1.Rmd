@@ -44,9 +44,12 @@ names(mammals)
 ```
 
 Let's rename some of the `mammals` variables.  
+
+
 ```{r}
 mammals <- rename(mammals, genus="Genus", wean_mass="wean mass", max_life= "max. life", litter_size="litter size", litters_per_year="litters/year")
 ```
+
 
 ```{r}
 names(mammals)
@@ -91,12 +94,11 @@ mammals %>%
 ## Practice
 1. We are interested in the fish from the lakes "AL" and "AR" with a radii length between 2 and 4. Extract this information from the `fish` data. Use pipes!  
 ```{r}
-fish %>%
-  filter(lakeid == "AL"| lakeid == "AR")
-  filter (radii_length_mm>2 & radii_length_mm<=4)
+fish %>% 
+  filter(fish, lakeid == "AL"|lakeid == "AR") %>% 
+  filter(radii_length_mm>=2 & radii_length_mm<=4)
 ```
 
-  
   check the one above 
   
 ## `arrange()`
@@ -127,7 +129,7 @@ fish %>%
 ```{r}
 fish %>%
   filter (fish_id =="300") %>% 
-  select(radii_length_mm,fish_id) %>% 
+   select(radii_length_mm,fish_id) %>% 
 arrange(radii_length_mm)
 ```
 
