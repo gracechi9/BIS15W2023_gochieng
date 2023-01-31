@@ -2,7 +2,9 @@
 title: "Homeworks and Notes"
 author: "Grace Ochieng"
 date: "2023-01-31"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
