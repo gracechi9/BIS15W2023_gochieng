@@ -21,7 +21,7 @@ median(x)
 ```
 To make a vector
 ```{r}
-x<-c(insert your values here by commas)
+x <-c(a,b,c)
 ```
 
 ## Lab Two Summary 
@@ -1398,21 +1398,6 @@ Why do we have NA here? Do all of these penguins lack data?
 penguins %>% 
   group_by(island) %>% 
   summarise(mean_body_mass=mean(body_mass_g),na.r=T)
-```
-
-Well, that won't work so let's remove the NAs and recalculate.
-
-penguins %>% 
-  filter(!is.nabody_masss_g0)
-  group_by(island) %>% 
-  summarise(mean_body_mass=mean(body_mass_g),na.r=T)
-What if we are interested in the number of observations (penguins) by species and island?
-```{r}
-names(penguins)
-```
-
-```{r}
-
 ```
 
 ## Counts
