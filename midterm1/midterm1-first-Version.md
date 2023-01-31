@@ -216,32 +216,199 @@ ecosphere %>%
 Problem 6. (2 points) The family Anatidae includes ducks, geese, and swans. Make a new object `ducks` that only includes species in the family Anatidae. Restrict this new dataframe to include all variables except order and family.
 
 ```r
-#duck<- select(ecosphere,-order,-family)
-#duck.a<-filter(duck, family=="Anatidae")
+ducks<-filter(ecosphere, family=="Anatidae")
+ducks %>% 
+  select(-order,-family)
+```
+
+```
+## # A tibble: 44 × 19
+##    commo…¹ scien…² diet  life_…³ habitat urban…⁴ migra…⁵ log10…⁶ mean_…⁷ mean_…⁸
+##    <chr>   <chr>   <chr> <chr>   <chr>   <chr>   <chr>     <dbl>   <dbl>   <dbl>
+##  1 "Ameri… Anas r… Vege… Long    Wetland No      Short      3.09     9       1  
+##  2 "Ameri… Anas a… Vege… Middle  Wetland No      Short      2.88     7.5     1  
+##  3 "Barro… Buceph… Inve… Middle  Wetland No      Modera…    2.96    10.5     3  
+##  4 "Black… Branta… Vege… Long    Wetland No      Modera…    3.11     3.5     2.5
+##  5 "Black… Melani… Inve… Middle  Wetland No      Modera…    3.02     9.5     2  
+##  6 "Black… Dendro… Vege… Short   Wetland No      Withdr…    2.88    13.5     1  
+##  7 "Blue-… Anas d… Vege… Middle  Wetland No      Modera…    2.56    10       0.6
+##  8 "Buffl… Buceph… Inve… Middle  Wetland No      Short      2.6      8.5     2  
+##  9 "Cackl… Branta… Vege… Middle  Wetland Yes     Short      3.45     5       1  
+## 10 "Canva… Aythya… Vege… Middle  Wetland No      Short      3.08     8       1  
+## # … with 34 more rows, 9 more variables: population_size <dbl>,
+## #   winter_range_area <dbl>, range_in_cbc <dbl>, strata <dbl>, circles <dbl>,
+## #   feeder_bird <chr>, median_trend <dbl>, lower_95_percent_ci <dbl>,
+## #   upper_95_percent_ci <dbl>, and abbreviated variable names ¹​common_name,
+## #   ²​scientific_name, ³​life_expectancy, ⁴​urban_affiliate, ⁵​migratory_strategy,
+## #   ⁶​log10_mass, ⁷​mean_eggs_per_clutch, ⁸​mean_age_at_sexual_maturity
 ```
 
  Problem 7. (2 points) We might assume that all ducks live in wetland habitat. Is this true for the ducks in these data? If there are exceptions, list the species below.
 
 ```r
-#ecosphere<- filter(habitat)
+filter(ducks,habitat!="Wetland") 
+```
+
+```
+## # A tibble: 1 × 21
+##   order     family commo…¹ scien…² diet  life_…³ habitat urban…⁴ migra…⁵ log10…⁶
+##   <chr>     <chr>  <chr>   <chr>   <chr> <chr>   <chr>   <chr>   <chr>     <dbl>
+## 1 Anserifo… Anati… Common… Somate… Inve… Middle  Ocean   No      Short      3.31
+## # … with 11 more variables: mean_eggs_per_clutch <dbl>,
+## #   mean_age_at_sexual_maturity <dbl>, population_size <dbl>,
+## #   winter_range_area <dbl>, range_in_cbc <dbl>, strata <dbl>, circles <dbl>,
+## #   feeder_bird <chr>, median_trend <dbl>, lower_95_percent_ci <dbl>,
+## #   upper_95_percent_ci <dbl>, and abbreviated variable names ¹​common_name,
+## #   ²​scientific_name, ³​life_expectancy, ⁴​urban_affiliate, ⁵​migratory_strategy,
+## #   ⁶​log10_mass
 ```
 
 Problem 8. (4 points) In ducks, how is mean body mass associated with migratory strategy? Do the ducks that migrate long distances have high or low average body mass?
 
+```r
+ducks%>% 
+  select("migratory_strategy","log10_mass") %>% 
+  arrange(migratory_strategy)
+```
+
+```
+## # A tibble: 44 × 2
+##    migratory_strategy log10_mass
+##    <chr>                   <dbl>
+##  1 Long                     2.89
+##  2 Long                     2.85
+##  3 Moderate                 2.96
+##  4 Moderate                 3.11
+##  5 Moderate                 3.02
+##  6 Moderate                 2.56
+##  7 Moderate                 3.33
+##  8 Moderate                 3   
+##  9 Moderate                 3.4 
+## 10 Moderate                 2.75
+## # … with 34 more rows
+```
 
 Problem 9. (2 points) Accipitridae is the family that includes eagles, hawks, kites, and osprey. First, make a new object `eagles` that only includes species in the family Accipitridae. Next, restrict these data to only include the variables common_name, scientific_name, and population_size.
 
+```r
+eagle<-filter(ecosphere, family=="Accipitridae")
+eagle %>% 
+  select(-common_name,-scientific_name,population_size )
+```
+
+```
+## # A tibble: 20 × 19
+##    order    family diet  life_…¹ habitat urban…² migra…³ log10…⁴ mean_…⁵ mean_…⁶
+##    <chr>    <chr>  <chr> <chr>   <chr>   <chr>   <chr>     <dbl>   <dbl>   <dbl>
+##  1 Falconi… Accip… Vert… Long    Wetland No      Short      3.67     2       4.5
+##  2 Falconi… Accip… Vert… Middle  Woodla… No      Long       2.66     2.5     1.5
+##  3 Falconi… Accip… Vert… Middle  Woodla… Yes     Short      2.63     4.5     2  
+##  4 Falconi… Accip… Vert… Middle  Grassl… No      Short      3.17     3       1.5
+##  5 Falconi… Accip… Vert… Long    Various No      Short      3.63     2.5     5.5
+##  6 Falconi… Accip… Vert… Middle  Woodla… No      Withdr…    2.63     2       2  
+##  7 Falconi… Accip… Vert… Middle  Shrubl… Yes     Reside…    2.93     9       1  
+##  8 Falconi… Accip… Inve… Middle  Woodla… No      Reside…    2.49     2.5     1  
+##  9 Falconi… Accip… Vert… Middle  Woodla… No      Withdr…    2.94     3       2  
+## 10 Falconi… Accip… Vert… Middle  Various No      Short      2.59     4       2.5
+## 11 Falconi… Accip… Inve… Middle  Woodla… No      Short      2.78     3.5     1  
+## 12 Falconi… Accip… Vert… Long    Woodla… Yes     Short      3.04     3       3  
+## 13 Falconi… Accip… Vert… Middle  Grassl… No      Modera…    2.98     4.5     2.5
+## 14 Falconi… Accip… Vert… Middle  Woodla… Yes     Short      2.12     4.5     2  
+## 15 Falconi… Accip… Vert… Middle  Woodla… No      Withdr…    2.71     2       1.5
+## 16 Falconi… Accip… Inve… Middle  Wetland No      Reside…    2.57     3       1  
+## 17 Falconi… Accip… Vert… Middle  Various No      Long       2.98     3       1.5
+## 18 Falconi… Accip… Vert… Middle  Grassl… No      Reside…    3.01     2.5     2  
+## 19 Falconi… Accip… Vert… Short   Various No      Withdr…    2.54     4.5     1  
+## 20 Falconi… Accip… Vert… Middle  Woodla… No      Short      2.88     1.5     2  
+## # … with 9 more variables: population_size <dbl>, winter_range_area <dbl>,
+## #   range_in_cbc <dbl>, strata <dbl>, circles <dbl>, feeder_bird <chr>,
+## #   median_trend <dbl>, lower_95_percent_ci <dbl>, upper_95_percent_ci <dbl>,
+## #   and abbreviated variable names ¹​life_expectancy, ²​urban_affiliate,
+## #   ³​migratory_strategy, ⁴​log10_mass, ⁵​mean_eggs_per_clutch,
+## #   ⁶​mean_age_at_sexual_maturity
+```
 
 Problem 10. (4 points) In the eagles data, any species with a population size less than 250,000 individuals is threatened. Make a new column `conservation_status` that shows whether or not a species is threatened.
 
+```r
+eagle %>%
+  select(scientific_name,population_size) %>% 
+  mutate(conservation_status=ifelse(population_size<250000,"threatened","safe")) %>% 
+  arrange(conservation_status)
+```
+
+```
+## # A tibble: 20 × 3
+##    scientific_name          population_size conservation_status
+##    <chr>                              <dbl> <chr>              
+##  1 Buteo platypterus                1700000 safe               
+##  2 Accipiter cooperii                700000 safe               
+##  3 Circus cyaneus                    700000 safe               
+##  4 Buteo lineatus                   1100000 safe               
+##  5 Buteo jamaicensis                2000000 safe               
+##  6 Buteo lagopus                     300000 safe               
+##  7 Accipiter striatus                500000 safe               
+##  8 Buteo swainsoni                   540000 safe               
+##  9 Buteo regalis                      80000 threatened         
+## 10 Aquila chrysaetos                 130000 threatened         
+## 11 Parabuteo unicinctus               50000 threatened         
+## 12 Accipiter gentilis                200000 threatened         
+## 13 Haliaeetus leucocephalus              NA <NA>               
+## 14 Buteo nitidus                         NA <NA>               
+## 15 Chondrohierax uncinatus               NA <NA>               
+## 16 Buteo brachyurus                      NA <NA>               
+## 17 Rostrhamus sociabilis                 NA <NA>               
+## 18 Buteo albicaudatus                    NA <NA>               
+## 19 Elanus leucurus                       NA <NA>               
+## 20 Buteo albonotatus                     NA <NA>
+```
 
 Problem 11. (2 points) Consider the results from questions 9 and 10. Are there any species for which their threatened status needs further study? How do you know?
 
+```r
+anyNA(eagle,"population_size")
+```
+
+```
+## [1] TRUE
+```
 
 Problem 12. (4 points) Use the `ecosphere` data to perform one exploratory analysis of your choice. The analysis must have a minimum of three lines and two functions. You must also clearly state the question you are attempting to answer.
 
+```r
+ecosphere %>% 
+  filter(population_size>100000) %>% 
+  group_by(family) %>% 
+  select(family,population_size,habitat) %>% 
+  arrange(desc(population_size))
+```
+
+```
+## # A tibble: 264 × 3
+## # Groups:   family [44]
+##    family        population_size habitat  
+##    <chr>                   <dbl> <chr>    
+##  1 Turdidae            300000000 Woodland 
+##  2 Emberizidae         210000000 Woodland 
+##  3 Emberizidae         200000000 Woodland 
+##  4 Emberizidae         170000000 Grassland
+##  5 Emberizidae         140000000 Woodland 
+##  6 Emberizidae         130000000 Various  
+##  7 Parulidae           130000000 Woodland 
+##  8 Icteridae           120000000 Various  
+##  9 Icteridae           110000000 Various  
+## 10 Polioptilidae       110000000 Woodland 
+## # … with 254 more rows
+```
+
+```r
+# In this code chunk I am trying to compare the population size and the habitat. By writing ths code chunk I can identify that Woodland habitat has most population in the ecosphere data. 
+```
 
 Please provide the names of the students you have worked with with during the exam:
 
+```r
+#Isaac Yang
+```
 
 Please be 100% sure your exam is saved, knitted, and pushed to your github repository. No need to submit a link on canvas, we will find your exam in your repository.

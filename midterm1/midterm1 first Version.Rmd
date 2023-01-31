@@ -72,44 +72,57 @@ ecosphere %>%
 
 Problem 6. (2 points) The family Anatidae includes ducks, geese, and swans. Make a new object `ducks` that only includes species in the family Anatidae. Restrict this new dataframe to include all variables except order and family.
 ```{r}
-#duck<- select(ecosphere,-order,-family)
-#duck.a<-filter(duck, family=="Anatidae")
-
+ducks<-filter(ecosphere, family=="Anatidae")
+ducks %>% 
+  select(-order,-family)
 ```
 
  Problem 7. (2 points) We might assume that all ducks live in wetland habitat. Is this true for the ducks in these data? If there are exceptions, list the species below.
 ```{r}
-#ecosphere<- filter(habitat)
+filter(ducks,habitat!="Wetland") 
 ```
 
 Problem 8. (4 points) In ducks, how is mean body mass associated with migratory strategy? Do the ducks that migrate long distances have high or low average body mass?
 ```{r}
-
+ducks%>% 
+  select("migratory_strategy","log10_mass") %>% 
+  arrange(migratory_strategy)
 ```
 
 Problem 9. (2 points) Accipitridae is the family that includes eagles, hawks, kites, and osprey. First, make a new object `eagles` that only includes species in the family Accipitridae. Next, restrict these data to only include the variables common_name, scientific_name, and population_size.
 ```{r}
-
+eagle<-filter(ecosphere, family=="Accipitridae")
+eagle %>% 
+  select(-common_name,-scientific_name,population_size )
 ```
 
 Problem 10. (4 points) In the eagles data, any species with a population size less than 250,000 individuals is threatened. Make a new column `conservation_status` that shows whether or not a species is threatened.
 ```{r}
-
+eagle %>%
+  select(scientific_name,population_size) %>% 
+  mutate(conservation_status=ifelse(population_size<250000,"threatened","safe")) %>% 
+  arrange(conservation_status)
+  
 ```
 
 Problem 11. (2 points) Consider the results from questions 9 and 10. Are there any species for which their threatened status needs further study? How do you know?
 ```{r}
-
+anyNA(eagle,"population_size")
 ```
 
 Problem 12. (4 points) Use the `ecosphere` data to perform one exploratory analysis of your choice. The analysis must have a minimum of three lines and two functions. You must also clearly state the question you are attempting to answer.
 ```{r}
-
+ecosphere %>% 
+  filter(population_size>100000) %>% 
+  group_by(family) %>% 
+  select(family,population_size,habitat) %>% 
+  arrange(desc(population_size))
+# In this code chunk I am trying to compare the population size and the habitat. By writing ths code chunk I can identify that Woodland habitat has most population in the ecosphere data. 
 ```
 
 Please provide the names of the students you have worked with with during the exam:
 ```{r}
-
+#Isaac Yang
 ```
 
 Please be 100% sure your exam is saved, knitted, and pushed to your github repository. No need to submit a link on canvas, we will find your exam in your repository.
