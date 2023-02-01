@@ -2,7 +2,9 @@
 title: "Cheat Sheet"
 author: "Grace Ochieng"
 date: "2023-01-27"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Lab One- R studio and R markdown 
 To find the mean
 ```{r}
-mean (x)
+mean ()
 ```
 To find the median
 ```{r}

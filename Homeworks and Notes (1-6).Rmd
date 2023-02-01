@@ -226,19 +226,11 @@ Data Frames- organize the vectors into a new type of data structure called a **d
 Once data have been uploaded, you may want to get an idea of its structure, contents, and dimensions. I routinely run one or more of these commands when data are first imported.  
 
 We can summarize our data frame with the`summary()` function.  
-```{r}
-summary(fish)
-```
+
 
 `glimpse()` is another useful summary function.
-```{r}
-glimpse(fish)
-```
 
 `nrow()` gives the numbers of rows.
-```{r}
-nrow(fish) #the number of rows or observations
-```
 
 `ncol` gives the number of columns.
 ```{r}
