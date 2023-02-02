@@ -535,7 +535,7 @@ fisheries_tidy %>%
 ```
 
 10. Use the data to do at least one analysis of your choice.
-## In this code chunk I tried to filter out species with a greater catch than 40000 and found in Peru a species named Engraulis ringens was caught ranging aroung that quantity in three years
+
 
 ```r
 fisheries_tidy %>%
@@ -553,6 +553,10 @@ fisheries_tidy %>%
 ## 1 Engraulis ringens  Peru     1970 77000
 ## 2 Engraulis ringens  Peru     1971 76800
 ## 3 Engraulis ringens  Peru     1968 62700
+```
+
+```r
+## In this code chunk I tried to filter out species with a greater catch than 40000 and found in Peru a species named Engraulis ringens was caught ranging aroung that quantity in three years
 ```
 
 

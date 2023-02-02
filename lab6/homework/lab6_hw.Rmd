@@ -139,13 +139,14 @@ fisheries_tidy %>%
 ```
 
 10. Use the data to do at least one analysis of your choice.
-## In this code chunk I tried to filter out species with a greater catch than 40000 and found in Peru a species named Engraulis ringens was caught ranging aroung that quantity in three years
+
 ```{r}
 fisheries_tidy %>%
   group_by(year,asfis_species_name) %>% 
   select(asfis_species_name,country,year,catch) %>%
   filter(catch>= 40000) %>% 
   arrange(desc(catch))
+## In this code chunk I tried to filter out species with a greater catch than 40000 and found in Peru a species named Engraulis ringens was caught ranging aroung that quantity in three years
 ```
 
 
