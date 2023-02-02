@@ -1,6 +1,7 @@
 ---
 title: "Fun with NA's"
-date: "`r Sys.Date()`"
+author: "Grace Ochieng"
+date: "`2023:2:1"
 output:
   html_document:
     theme: spacelab
@@ -45,6 +46,7 @@ Let's next check to see if our data has any NA's by evaluating everything logica
 Keep in mind, if the authors of the data represented NA's in another way, they will not be detected by R.  
 ```{r}
 #is.na(msleep)
+#this is not supper helpful it runs a very long data 
 ```
 
 We also learned...
@@ -59,6 +61,7 @@ msleep %>%
 ```
 
 This is better, but we still don't have any idea of where those NA's are in our data. With such limited information, it would be hard to determine if the issue was systemic or isolated to a single variable. In order to do this, we can apply `is.na()` to each variable of interest- which would be very slow!
+this is now per variable in particular conservation
 ```{r}
 msleep %>% 
   summarize(number_nas = sum(is.na(conservation)))
@@ -88,20 +91,26 @@ amniota <- readr::read_csv("data/amniota.csv")
 ```
 
 ```{r}
-
+any_na(amniota)
 ```
 
 2. Use one of the tools explained above to summarize NA's in the data.
 ```{r}
-
+amniota %>% 
+  summarize(number_nas = sum(is.na(amniota)))
 ```
 
 3. What's going on here? Try using the `hist` function on one or more of the continuous variables.
 ```{r}
+hist(amniota$adult_body_mass_g)
+```
 
+```{r}
+names(amniota)
 ```
 
 4. Given that we know that the output of #2 is wrong, what do you think is the best approach for dealing with NA's in the `amniote` data? How are they represented?  
+By running the code chunk we can idenetify that NA is represented in a different value so to solve for this 
 
 ## Replacing values with NA
 If you are certain that NA's are represented by a specific value in the data, the best way to deal with them is to replace the value with NA. This is similar to a find & replace function in excel. 
@@ -109,6 +118,7 @@ If you are certain that NA's are represented by a specific value in the data, th
 _A note on excel:_ you may find yourself tempted to just open the .csv in excel and use find & replace. But, this isn't transparent; i.e. you are manipulating the data in a way that others can't see so this is not good practice in data science.   
 
 Let's say we know that NA's are represented by "-999" in `amniota`. We can replace this value with NA across the data frame. You might be tempted to overwrite `amniota`, but in these cases I like to make a new object.
+-this states that if its a -999 mae it to an NA
 ```{r}
 amniota_tidy <- amniota %>% 
   na_if("-999")
@@ -118,6 +128,11 @@ Now let's run that function from problem #2 again to see how we did.
 ```{r}
 amniota_tidy %>% 
   summarise_all(~(sum(is.na(.))))
+```
+lets say you know that there is a value and you know here is the shortcut add ipe then value replacement
+```{r}
+amniota <- readr::read_csv("data/amniota.csv")%>% 
+  na_if("-999")
 ```
 
 ## Replacing NAs with `na_if()` and `mutate()`
@@ -159,17 +174,27 @@ life_history <- read_csv("data/mammal_lifehistories_v2.csv")
 
 1. Do you see any NA's? Try using naniar.
 ```{r}
-
+naniar::miss_var_summary(life_history)
+# code chunk states that NA is not seen in this data
+```
+```{r}
+glimpse(life_history)
+# by using glimpse we can see that NA are represented in the data by value-999 and -999.0
 ```
 
 2. Does this result seem likely? How are NA's represented in the data?
 ```{r}
-
+life_history %>% 
+  summarize(number_nas = sum(is.na(life_history)))
 ```
 
 3. Replace the placeholder values with NA and recheck.
 ```{r}
-
+life_history <- read_csv("data/mammal_lifehistories_v2.csv")%>% 
+  na_if("-999")
+```
+```{r}
+naniar::miss_var_summary(life_history)
 ```
 
 ## Wrap-up  
