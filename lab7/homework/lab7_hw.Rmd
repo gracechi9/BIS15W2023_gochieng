@@ -1,7 +1,7 @@
 ---
 title: "Lab 7 Homework"
-author: "Joel Ledford"
-date: "`r Sys.Date()`"
+author: "Grace Ochieng"
+date: "2023:2:3"
 output:
   html_document: 
     theme: spacelab
@@ -32,6 +32,7 @@ Myhrvold N, Baldridge E, Chan B, Sivam D, Freeman DL, Ernest SKM (2015). “An a
 database to perform comparative analyses with birds, mammals, and reptiles.” _Ecology_, *96*, 3109.
 doi: 10.1890/15-0846.1 (URL: https://doi.org/10.1890/15-0846.1).
 ```{r}
+amniota <- readr::read_csv(file = "data/amniota.csv")
 
 ```
 
@@ -40,60 +41,101 @@ Oliveira BF, São-Pedro VA, Santos-Barrera G, Penone C, Costa GC (2017). “Amph
 for amphibian ecological traits.” _Scientific Data_, *4*, 170123. doi: 10.1038/sdata.2017.123 (URL:
 https://doi.org/10.1038/sdata.2017.123).
 ```{r}
-
+amphibio <- readr::read_csv(file = "data/amphibio.csv")
 ```
 
 ## Questions  
 **2. Do some exploratory analysis of the `amniota` data set. Use the function(s) of your choice. Try to get an idea of how NA's are represented in the data.**  
 ```{r}
-
+amniota %>% 
+  summarise_all(~(sum(is.na(.))))
 ```
-
+CHECK THE VALUES ABOVE
 **3. Do some exploratory analysis of the `amphibio` data set. Use the function(s) of your choice. Try to get an idea of how NA's are represented in the data.**  
 ```{r}
-
+amphibio %>% 
+  summarise_all(~(sum(is.na(.))))
 ```
 
 **4. How many total NA's are in each data set? Do these values make sense? Are NA's represented by values?**   
 
 `amniota`  
 ```{r}
-
+amniota %>% 
+  summarize(number_nas = sum(is.na(amniota)))
+# this one does not make any sense why? because when we use glimpse and summary  to see the data we can see values that doe not reflect the Na's not being present in this data for instance we made a summary we can see means being a negative value and that means that 
+```
+```{r}
+summary(amniota)
 ```
 
 `amphibio`  
 ```{r}
-
+amphibio %>% 
+  summarize(number_nas = sum(is.na(amphibio)))
 ```
 
 **5. Make any necessary replacements in the data such that all NA's appear as "NA".**   
 ```{r}
-
+amniota_clean <- amniota %>% 
+  na_if("-999")
 ```
 
 **6. Use the package `naniar` to produce a summary, including percentages, of missing data in each column for the `amniota` data.**  
 ```{r}
+#install.packages("naniar")
+```
 
+```{r}
+library("naniar")
+# first load the naniar package 
+```
+
+```{r}
+naniar::miss_var_summary(amniota_clean)
 ```
 
 **7. Use the package `naniar` to produce a summary, including percentages, of missing data in each column for the `amphibio` data.**
 ```{r}
-
+naniar::miss_var_summary(amphibio)
 ```
 
 **8. For the `amniota` data, calculate the number of NAs in the `egg_mass_g` column sorted by taxonomic class; i.e. how many NA's are present in the `egg_mass_g` column in birds, mammals, and reptiles? Does this results make sense biologically? How do these results affect your interpretation of NA's?**  
+filter(class=="birds, mammals, reptiles") %>% 
 ```{r}
+amniota_clean%>%
+  group_by(class) %>%
+  select(class, egg_mass_g) %>% 
+  naniar::miss_var_summary(order=T) %>% 
+  arrange(desc(pct_miss))
 
 ```
 
 **9. The `amphibio` data have variables that classify species as fossorial (burrowing), terrestrial, aquatic, or arboreal.Calculate the number of NA's in each of these variables. Do you think that the authors intend us to think that there are NA's in these columns or could they represent something else? Explain.**
-```{r}
 
+```{r}
+amphibio2 <-
+  amphibio %>% 
+  pivot_longer(Fos:Arb,
+               names_to = "classification",
+               values_to = "Count")
+amphibio2 %>% 
+  group_by(classification) %>%
+  summarise(n_species = sum(Count, na.rm = TRUE))
+amphibio2
+
+amphibio2 %>% 
+  group_by(classification) %>%
+  summarise(n_species = sum(Count, na.rm = TRUE)) %>% 
+  ggplot(aes(x = classification, y = n_species, na.rm = TRUE))+
+  geom_bar(stat = "identity")
 ```
 
 **10. Now that we know how NA's are represented in the `amniota` data, how would you load the data such that the values which represent NA's are automatically converted?**
 ```{r}
-
+amniota <- readr::read_csv("data/amniota.csv")%>% 
+  na_if("-999")
+## This code chunk runs to automatically convert the 'amniota' data's NA's
 ```
 
 ## Push your final code to GitHub!
