@@ -1,5 +1,6 @@
 ---
 title: "Tidyr 1: Tidy data and `pivot_long()`"
+author: "Grace Ochieng"
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -58,6 +59,7 @@ Rules:
 The following data show results from a drug trial with four treatments on six patients. The values represent resting heart rate.  
 ```{r}
 heartrate <- read_csv("data/heartrate.csv")
+heartrate
 ```
 
 Want to try the `here` package(https://here.r-lib.org/index.html)? I have found that many new R users have difficulty managing directories and accessing files. The `here` package makes this a bit more intuitive.
@@ -67,10 +69,12 @@ getwd()
 
 ```{r}
 here()
+# it always puts you in the main directory
 ```
 
 ```{r}
 heartrate <- read_csv(here("lab8", "data2", "heartrate.csv"))
+# you need reader here just makes sure that the data. note that everything i sensitive so if you were to search your directory and lab 8 was included DO NOT write it while using here
 ```
 
 ```{r}
@@ -79,28 +83,39 @@ heartrate
 
 Let's assess whether or not these data are tidy.  
 (1) each variable has its own column?  
- 
+ - by looking at the data no the a b c d ar different drugs  
 (2) each observation has its own row?  
-
+- yes
 (3) each value has its own cell?  
-  
+- yes
 To fix this problem, we need to reshape the table to long format while keeping track of column names and values. We do this using `pivot_longer()`. Notice that the dimensions of the data frame change.  
 ```{r}
-
+heartrate %>% 
+  pivot_longer(-patient, # patient will ot be removed
+               names_to="drug", # make a new column name to drug
+               values_to = "heartrate" #values moved to anew column names 
+               )
 ```
 
 ## Practice
 1. Import the file `relig_income.csv` and store it as a new object `relig_income`.  
-```{r}
 
+
+```{r}
+relig_income <- read_csv("data/relig_income.csv")
+relig_income
 ```
 
 2. Why are these data untidy?  
-
+- These values are not tidy because each variable did not have their own rows or example the income gained is listed as a row instead of a column
 
 3. Use `pivot_longer()` to make the data tidy.  
 ```{r}
-
+relig_income %>% 
+  pivot_longer(-religion, # religion will ot be removed
+               names_to="income", # make a new column name to income
+               values_to = "n_income_ob" #values moved to a new column name numer of observations for each
+               )
 ```
 
 ## Example 2: some column names are data
@@ -114,10 +129,10 @@ Solution 1: specify a range of columns that you want to pivot.
 ```{r}
 billboard2 <- 
   billboard %>% 
-  pivot_longer(wk1:wk76, # a range of columns
+  pivot_longer(wk1:wk76, # this is specifiying a range of columns
                names_to = "week",
                values_to = "rank",
-               values_drop_na = TRUE #this will drop the NA's
+               values_drop_na = TRUE #this will drop the NA's and cut back anywhere the sng fel of he chart
                )
 billboard2
 ```
@@ -143,22 +158,32 @@ billboard %>%
    names_prefix = "wk",
    values_to = "rank",
    values_drop_na = TRUE)
+# alll these examples make data frame much biggger on one end but ow we  hae a simplified version 
 ```
 
 ## Practice  
 1. Import `plant_data.csv` as a new object `plant_data`.  
 ```{r}
-
+plant_data <- read_csv("data/plant_data.csv")
+plant_data
 ```
 
 2. Why are these data not tidy?  
-
+- The days are not represented in the right frame they should also be a variable
 
 3. Use `pivot_longer()` to make the data tidy. Focus the data only on genotype, day, and measurement.  
 ```{r}
-
+plant_data2 <- 
+  plant_data %>% 
+  pivot_longer(-c(genotype, water_sched_prog, greenhouse), #specific columns
+               names_to = "day",
+               values_to = "measurement",
+               values_drop_na = TRUE
+               )
+plant_data2
 ```
 
+** Check the Question Above**
 ## Example 3: more than one variable in a column name
 In this case, there are two observations in each column name.
 ```{r}
