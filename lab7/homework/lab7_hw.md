@@ -307,7 +307,7 @@ naniar::miss_var_summary(amphibio)
 ```
 
 **8. For the `amniota` data, calculate the number of NAs in the `egg_mass_g` column sorted by taxonomic class; i.e. how many NA's are present in the `egg_mass_g` column in birds, mammals, and reptiles? Does this results make sense biologically? How do these results affect your interpretation of NA's?**  
-filter(class=="birds, mammals, reptiles") %>% 
+
 
 ```r
 amniota_clean%>%
@@ -331,62 +331,27 @@ amniota_clean%>%
 
 
 ```r
-amphibio2 <-
-  amphibio %>% 
-  pivot_longer(Fos:Arb,
-               names_to = "classification",
-               values_to = "Count")
-amphibio2 %>% 
-  group_by(classification) %>%
-  summarise(n_species = sum(Count, na.rm = TRUE))
+#stru(amphibio)
+# checking the names that these variables are represented by in the data 'amphiobio'
+```
+
+
+```r
+amphibio %>% 
+  summarise_all(~(sum(is.na(.)))) %>% 
+  select(Fos,Ter,Aqu,Arb)
 ```
 
 ```
-## # A tibble: 4 × 2
-##   classification n_species
-##   <chr>              <dbl>
-## 1 Aqu                 3966
-## 2 Arb                 2429
-## 3 Fos                  723
-## 4 Ter                 5672
+## # A tibble: 1 × 4
+##     Fos   Ter   Aqu   Arb
+##   <int> <int> <int> <int>
+## 1  6053  1104  2810  4347
 ```
 
 ```r
-amphibio2
+# Checking the values of NA the authors could mean that for they could find no species data in these variables/habitats or by looking at how great these values are they just are not investigated areas yet so they have no data yet
 ```
-
-```
-## # A tibble: 27,104 × 36
-##    id      Order Family   Genus Species Leaves Flowers Seeds Fruits Arthro  Vert
-##    <chr>   <chr> <chr>    <chr> <chr>    <dbl>   <dbl> <dbl> <lgl>   <dbl> <dbl>
-##  1 Anf0001 Anura Allophr… Allo… Alloph…     NA      NA    NA NA          1    NA
-##  2 Anf0001 Anura Allophr… Allo… Alloph…     NA      NA    NA NA          1    NA
-##  3 Anf0001 Anura Allophr… Allo… Alloph…     NA      NA    NA NA          1    NA
-##  4 Anf0001 Anura Allophr… Allo… Alloph…     NA      NA    NA NA          1    NA
-##  5 Anf0002 Anura Alytidae Alyt… Alytes…     NA      NA    NA NA          1    NA
-##  6 Anf0002 Anura Alytidae Alyt… Alytes…     NA      NA    NA NA          1    NA
-##  7 Anf0002 Anura Alytidae Alyt… Alytes…     NA      NA    NA NA          1    NA
-##  8 Anf0002 Anura Alytidae Alyt… Alytes…     NA      NA    NA NA          1    NA
-##  9 Anf0003 Anura Alytidae Alyt… Alytes…     NA      NA    NA NA          1    NA
-## 10 Anf0003 Anura Alytidae Alyt… Alytes…     NA      NA    NA NA          1    NA
-## # … with 27,094 more rows, and 25 more variables: Diu <dbl>, Noc <dbl>,
-## #   Crepu <dbl>, Wet_warm <dbl>, Wet_cold <dbl>, Dry_warm <dbl>,
-## #   Dry_cold <dbl>, Body_mass_g <dbl>, Age_at_maturity_min_y <dbl>,
-## #   Age_at_maturity_max_y <dbl>, Body_size_mm <dbl>,
-## #   Size_at_maturity_min_mm <dbl>, Size_at_maturity_max_mm <dbl>,
-## #   Longevity_max_y <dbl>, Litter_size_min_n <dbl>, Litter_size_max_n <dbl>,
-## #   Reproductive_output_y <dbl>, Offspring_size_min_mm <dbl>, …
-```
-
-```r
-amphibio2 %>% 
-  group_by(classification) %>%
-  summarise(n_species = sum(Count, na.rm = TRUE)) %>% 
-  ggplot(aes(x = classification, y = n_species, na.rm = TRUE))+
-  geom_bar(stat = "identity")
-```
-
-![](lab7_hw_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
 **10. Now that we know how NA's are represented in the `amniota` data, how would you load the data such that the values which represent NA's are automatically converted?**
 
@@ -407,7 +372,7 @@ amniota <- readr::read_csv("data/amniota.csv")%>%
 ```
 
 ```r
-## This code chunk runs to automatically convert the 'amniota' data's NA's
+## This code chunk runs to automatically convert the 'amniota' data's NA's so -999 is now NA :)
 ```
 
 ## Push your final code to GitHub!

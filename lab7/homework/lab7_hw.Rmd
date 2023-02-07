@@ -101,7 +101,7 @@ naniar::miss_var_summary(amphibio)
 ```
 
 **8. For the `amniota` data, calculate the number of NAs in the `egg_mass_g` column sorted by taxonomic class; i.e. how many NA's are present in the `egg_mass_g` column in birds, mammals, and reptiles? Does this results make sense biologically? How do these results affect your interpretation of NA's?**  
-filter(class=="birds, mammals, reptiles") %>% 
+
 ```{r}
 amniota_clean%>%
   group_by(class) %>%
@@ -114,28 +114,22 @@ amniota_clean%>%
 **9. The `amphibio` data have variables that classify species as fossorial (burrowing), terrestrial, aquatic, or arboreal.Calculate the number of NA's in each of these variables. Do you think that the authors intend us to think that there are NA's in these columns or could they represent something else? Explain.**
 
 ```{r}
-amphibio2 <-
-  amphibio %>% 
-  pivot_longer(Fos:Arb,
-               names_to = "classification",
-               values_to = "Count")
-amphibio2 %>% 
-  group_by(classification) %>%
-  summarise(n_species = sum(Count, na.rm = TRUE))
-amphibio2
+#stru(amphibio)
+# checking the names that these variables are represented by in the data 'amphiobio'
+```
 
-amphibio2 %>% 
-  group_by(classification) %>%
-  summarise(n_species = sum(Count, na.rm = TRUE)) %>% 
-  ggplot(aes(x = classification, y = n_species, na.rm = TRUE))+
-  geom_bar(stat = "identity")
+```{r}
+amphibio %>% 
+  summarise_all(~(sum(is.na(.)))) %>% 
+  select(Fos,Ter,Aqu,Arb)
+# Checking the values of NA the authors could mean that for they could find no species data in these variables/habitats or by looking at how great these values are they just are not investigated areas yet so they have no data yet
 ```
 
 **10. Now that we know how NA's are represented in the `amniota` data, how would you load the data such that the values which represent NA's are automatically converted?**
 ```{r}
 amniota <- readr::read_csv("data/amniota.csv")%>% 
   na_if("-999")
-## This code chunk runs to automatically convert the 'amniota' data's NA's
+## This code chunk runs to automatically convert the 'amniota' data's NA's so -999 is now NA :)
 ```
 
 ## Push your final code to GitHub!
