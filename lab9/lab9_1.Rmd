@@ -1,6 +1,7 @@
 ---
 title: "Data Visualization: `ggplot` part 1"
-date: "`r Sys.Date()`"
+date: "02:09:2023"
+author: "Grace Ochieng"
 output:
   html_document:
     theme: spacelab
@@ -43,6 +44,7 @@ We first need to define some of the data types we will use to build plots.
 + `discrete` quantitative data that only contains integers
 + `continuous` quantitative data that can take any numerical value
 + `categorical` qualitative data that can take on a limited number of values
+ number weight names 
 
 ## Basics
 The syntax used by ggplot takes some practice to get used to, especially for customizing plots, but the basic elements are the same. It is helpful to think of plots as being built up in layers.  
@@ -63,24 +65,24 @@ glimpse(iris)
 
 To make a plot, we need to first specify the data and map the aesthetics. The aesthetics include how each variable in our data set will be used. In the example below, I am using the aes() function to identify the x and y variables in the plot.
 ```{r}
-
+ggplot(data=iris, mapping=aes(x=Species, y=Petal.Length)) #only first line is empty geom box plot gives us data in our plot
 ```
 
 Notice that we have a nice background, labeled axes, and even a value range of our variables on the y-axis- but no plot. This is because we need to tell ggplot how we want our data represented. This is called the geometry or `geom()`. There are many types of `geom`, see the ggplot [cheatsheet](https://posit.co/resources/cheatsheets/).
 
 Here we specify that we want a boxplot, indicated by `geom_boxplot()`.
 ```{r}
-
+ggplot(data=iris,mapping=aes(x=Species, y=Petal.Length))+geom_boxplot()
 ```
 
 ## Practice
 1. Use the iris data to build a scatterplot that compares sepal length vs. sepal width. Use the cheat sheet or help to find the correct `geom_` for a scatterplot.
 ```{r}
-
+ggplot(data=iris,mapping=aes(x=Sepal.Length, y=Sepal.Width))+ geom_point()
 ```
 
 ```{r}
-
+names(iris)
 ```
 
 
@@ -98,9 +100,20 @@ homerange <- read_csv(here("lab9", "data", "Tamburelloetal_HomeRangeDatabase.csv
 ## Practice
 1. What is the structure of the `homerange` data? Does it have any NA's? Is it tidy? Do a quick exploratory analysis of your choice below.
 ```{r}
-
+structure(homerange)
+```
+```{r}
+is.na(homerange)
+# produces a long messy revelation of each NA in the data
 ```
 
+```{r}
+anyNA(homerange)
+```
+```{r}
+naniar::miss_var_summary(homerange)
+# number of NA in each variable
+```
 ### 1. Scatter Plots
 Scatter plots are good at revealing relationships that are not readily visible in the raw data. For now, we will not add regression lines or calculate any r^2^ values.  
 
@@ -110,22 +123,31 @@ names(homerange)
 ```
 
 ```{r}
-
+ggplot(data=homerange,mapping=aes(x=log10.mass, y=log10.hra))+geom_point()# remebr the question is specifically stating to use the log values of hra and  mass
+# this data is mesy we have overlap
 ```
 
 In big data sets with lots of overlapping values, over-plotting can be an issue. `geom_jitter()` is similar to `geom_point()` but it helps with over plotting by adding some random noise to the data and separating some of the individual points.
 ```{r}
-
+ggplot(data=homerange,mapping=aes(x=log10.mass, y=log10.hra))+geom_jitter()
 ```
 
 To add a regression (best of fit) line, we just add another layer.
 ```{r}
-
+ggplot(data=homerange,mapping=aes(x=log10.mass, y=log10.hra))+
+  geom_point()+
+  geom_smooth(method=lm,se= T)
 ```
 
 ### Practice
 1. What is the relationship between log10.hra and log10.preymass? What do you notice about how ggplot treats NA's?
+```{r}
+ggplot(data=homerange,mapping=aes(x=log10.hra, y=log10.preymass))+geom_point()# ggplot remove NA in the data our pllot basically deleted them and did nto plot them 
+```
 
+```{r}
+ggplot(data=homerange,mapping=aes(x=log10.hra,y=log10.preymass))+geom_point(na.rm=T)+geom_smooth(method=lm,se= T)
+```
 
 ### Bar Plot: `geom_bar()`
 The simplest type of bar plot counts the number of observations in a categorical variable. In this case, we want to know how many observations are present in the variable `trophic.guild`. Notice that we do not specify a y-axis because it is count by default.  
@@ -176,12 +198,35 @@ homerange %>%
 
 ## Practice
 1. Filter the `homerange` data to include `mammals` only.
+```{r}
+homerange_mam<-
+  homerange %>% 
+  filter(taxon=="mammals")
+homerange_mam
+```
+```{r}
+# different code used by professor
+```
 
 
 2. Are there more herbivores or carnivores in mammals? Make a bar plot that shows their relative numbers.
+```{r}
+homerange_mam %>%
+  ggplot(aes(x=trophic.guild)) + 
+  geom_bar()
+# more herbivores
+```
 
 
 3. Make a bar plot that shows the masses of the top 10 smallest mammals.
+```{r}
+#homerange_mam %>% 
+# top_n(-10,log10.mass) %>% 
+ # ggplot(aes(x=common.name, y=log10.mass))+
+ # geom_col()+
+ # cord(flipped_names())
+              
+```
 
 
 ## That's it! Let's take a break and then move on to part 2!  

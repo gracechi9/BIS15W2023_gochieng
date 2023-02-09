@@ -45,6 +45,9 @@ penguins %>% count(island)
 Make this output more visual by adding a plot...
 ```{r}
 
+penguins %>% 
+  ggplot(aes(x=island)) + 
+  geom_bar()
 ```
 
 What if we wanted a plot that showed the number of measured penguins for each species?
@@ -53,8 +56,13 @@ penguins %>% count(species)
 ```
 
 ```{r}
-
+penguins %>% 
+  ggplot(aes(x=species)) + 
+  geom_bar()
 ```
+count(island)
+ggplot(aes(x=specises,y=n))+
+geom_col()
 
 How about average bill length by sex?
 ```{r}
