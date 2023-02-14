@@ -57,12 +57,12 @@ homerange <- read_csv(here("lab10", "data", "Tamburelloetal_HomeRangeDatabase.cs
 There are many options to create nice plots in ggplot. One useful trick is to store the plot as a new object and then experiment with geom's and aesthetics.
 ```{r}
 p <- homerange %>% 
-  ggplot(aes(x= log10.mass, y= log10.hra))
+  ggplot(aes(x= log10.mass, y= log10.hra)) #stored as p
 ```
 
 Play with point size.
 ```{r}
-p +geom_point(size=2)
+p +geom_point(size=1)
 ```
 
 Map shapes to another categorical variable.
@@ -75,7 +75,7 @@ At this point you should be comfortable building bar plots that shows counts of 
 
 Let's start by counting how many observations we have in each taxonomic group.
 ```{r}
-homerange %>% count(taxon)
+homerange %>% count(taxon, sort=T)
 ```
 
 Now let's make a bar plot of these data.
@@ -95,6 +95,7 @@ homerange %>%
   labs(title = "Observations by Taxon in Homerange Data",
        x = "Taxonomic Group",
        fill = "Trophic Guild")
+# shows propotion but to be honest side by sde is better
 ```
 
 We can also have counts of each trophic guild within taxonomic group shown side-by-side by specifying `position="dodge"`.
@@ -105,6 +106,7 @@ homerange %>%
   labs(title = "Observations by Taxon in Homerange Data",
        x = "Taxonomic Group",
        fill = "Trophic Guild")
+# gives a better propotion by addding a side by side propotion
 ```
 
 Here is the same plot oriented vertically.
@@ -112,8 +114,8 @@ Here is the same plot oriented vertically.
 homerange %>% 
   ggplot(aes(x = taxon, fill = trophic.guild)) +
   geom_bar(position = "dodge") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-  labs(title = "Observations by Taxon in Homerange Data",
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) + # this and the code line below makes it more adjustable now we can read the names 
+  labs(title = "Observations by Taxon in Homerange Data", 
        x = "Taxonomic Group",
        fill= "Trophic Guild")
 ```

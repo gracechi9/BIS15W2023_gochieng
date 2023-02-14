@@ -44,10 +44,14 @@ Bar plots count the number of observations in a categorical variable.
 ```{r}
 life_history %>% 
   count(order, sort=T)
+#F sorts them alphabetically 
 ```
 
 ```{r}
-
+life_history %>% 
+  ggplot(aes(x=order))+
+  geom_bar()+
+  coord_flip()
 ```
 
 ```{r}
@@ -57,21 +61,37 @@ life_history %>%
 ```
 
 ```{r}
-
+life_history %>% 
+  group_by(order) %>% 
+  summarize(mean_mass=mean(mass, na.rm=T)) %>% 
+  ggplot(aes(x=order, y=mean_mass))+
+  geom_col()+
+  coord_flip()+
+  scale_y_log10()#this last sentence scales so there is not much distinction
 ```
 
 ```{r}
-
+ life_history %>% 
+  group_by(order) %>% 
+  summarize(mean_mass=mean(mass, na.rm=T)) %>% 
+  ggplot(aes(x=reorder(order,mean_mass), y=mean_mass))+ # its aesthetically pleasing ordering by value
+  geom_col()+
+  coord_flip()+
+  scale_y_log10()
 ```
 
 ```{r}
-
+options(scipen=999)
+# cancels scientific notation for the session (so that R does not use it )
 ```
 
 ## Scatterplots
 Scatter plots allow for comparisons of two continuous variables.
 ```{r}
-
+life_history %>% 
+  ggplot(aes(x=gestation,y=wean_mass))+
+  geom_point(na.m=T)+
+  scale_y_log10()# without adding this scale_mass_log10 it doesnt provide a clear data we just like zoomed in to see the values better
 ```
 
 ## Boxplots
@@ -81,7 +101,19 @@ glimpse(life_history)
 ```
 
 ```{r}
-
+life_history %>% 
+  ggplot(aes(x=order, y=mass))+
+  geom_boxplot(na.rm=T)+
+  coord_flip()+
+  scale_y_log10()
+```
+```{r}
+#life_history %>% 
+  #filter(order= Cetacea)
+ # ggplot(aes(x=order, y=mass))+
+ # geom_boxplot(na.rm=T)+
+ # coord_flip()+
+  #scale_y_log10()
 ```
 
 Remember, you can always use dplyr functions to focus your question, summarize, etc.
@@ -97,17 +129,30 @@ elephants <- read_csv("data/elephantsMF.csv") %>% clean_names()
 
 1. How many male and female elephants are represented in the data. How would you make a plot of this?
 ```{r}
+elephants %>% 
+  count(sex)
+```
+```{r}
+#elephants %>% 
+ # ggplot(aes(x=sex))+
+ # geom_bar
 
+# you would make a plot of this by 
 ```
 
 2. How does the age of elephants compare by sex?
 ```{r}
-
+elephants %>% 
+  ggplot(aes(x=sex, y=age))+
+  geom_boxplot() 
+# go over this
 ```
 
 3. What is the relationship between age and height?
 ```{r}
-
+elephants %>% 
+  ggplot(aes(x=age, y=height))+
+  geom_point()
 ```
 
 ## Aesthetics: Labels
@@ -121,12 +166,23 @@ elephants %>%
 
 The plot looks clean, but it is incomplete. A reader unfamiliar with the data might have a difficult time interpreting the labels. To add custom labels, we use the `labs` command.
 ```{r}
-
+elephants %>% 
+  ggplot(aes(x=age, y=height)) +
+  geom_point() +
+  geom_smooth(method=lm, se=F)+
+  labs(title="Elephant Age vs Height",
+       x="age",
+       y="height")
 ```
 
 We can improve the plot further by adjusting the size and face of the text. We do this using `theme()`.
 ```{r}
-
+elephants %>% 
+  ggplot(aes(x=age, y=height)) + geom_point() + geom_smooth(method=lm, se=F) +
+  labs(title = "Elephant Age vs. Height",
+       x = "Age",
+       y = "Height") +
+  theme(plot.title = element_text(size = rel(1.25), hjust = 1))# themme command gives us power over size and location of our created title 
 ```
 
 The `rel()` option changes the relative size of the title to keep things consistent. Adding `hjust` allows control of title position.
@@ -136,19 +192,30 @@ elephants %>%
   labs(title = "Elephant Age vs. Height",
        x = "Age",
        y = "Height") +
-  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5))
+  theme(plot.title = element_text(size = rel(1.5), hjust = 0))
 ```
 
 ## Other Aesthetics
 There are lots of options for aesthetics. An aesthetic can be assigned to either numeric or categorical data. `fill` is a common grouping option; notice that an appropriate key is displayed when you use one of these options.
 ```{r}
-
+elephants %>% 
+  ggplot(aes(x=sex,fill=sex))+ # by adding fill we get a color of our plotted variables 
+  geom_bar()
 ```
 
 `size` adjusts the size of points relative to a continuous variable.
 ```{r}
-
+#lfe_history %>% 
+#  ggplot(aes(x=gestation, y= log10.mass, size=mass))+
+#  geom_point(na.rm=T)
 ```
+
+```{r}
+life_history %>% 
+  filter(gestation>=20)
+```
+
+
 
 ## Practice
 1. Let's finish part 1 by looking at the homerange data `Tamburelloetal_HomeRangeDatabase`. By now, these should be very familiar to you.
