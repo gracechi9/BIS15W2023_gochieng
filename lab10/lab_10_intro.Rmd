@@ -1,7 +1,9 @@
 ---
 title: "Lab 10 Intro"
 date: "`r Sys.Date()`"
-output: ioslides_presentation
+output: 
+  ioslides_presentation: 
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -15,5 +17,25 @@ library("jpeg")
 
 ## Warm-up
 1. Please load the homerange data `Tamburelloetal_HomeRangeDatabase.csv`
+```{r}
+#homerange <- read_csv("data/Tamburelloetal_HomeRangeDatabase.csv", na="-999")%>%clean_names()
+```
+
 2. Show the min, mean, and max log10.mass by taxonomic class in the dataset.
+```{r}
+homerange %>% 
+  group_by(class) %>% 
+  summarize(min_log10.mass=min(log10_mass),
+            max_log10.mass=max(log10_mass),
+            mean_log10.mass=mean(log10_mass),
+            median_log10.mass=median(log10_mass)
+            )
+```
+
 3. Make a plot that best summarizes this output.
+```{r}
+homerange %>% 
+  ggplot(aes(x=class, y=log10_mass))+
+  geom_boxplot()
+```
+
