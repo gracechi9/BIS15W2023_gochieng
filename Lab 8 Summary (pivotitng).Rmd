@@ -42,7 +42,7 @@ getwd()
 ```
 
 ```{r}
-here()
+#here()
 # it always puts you in the main directory
 ```
 
