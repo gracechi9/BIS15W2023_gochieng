@@ -5,7 +5,6 @@ output:
     theme: spacelab
     toc: yes
     toc_float: yes
-    self_contained: no
     keep_md: yes
   pdf_document:
     toc: yes
@@ -242,7 +241,9 @@ homerange %>%
 summary(homerange$log10.hra)
 ```
 ```{r}
-install.packages("gtools")
+library(gtools)
+quartiles <- quantcut(homerange$log10.hra)
+table(quartiles)
 ```
 
 ```{r}
@@ -251,33 +252,34 @@ quartiles <- quantcut(homerange$log10.hra)
 table(quartiles)
 ```
 
-2. How many and which taxonomic classes are represented in each of the `range_category` classes?
-
 ```{r}
 homerange <- homerange %>% 
-             mutate(range_category = case_when(log10.hra < 3.65 ~ "small",
-                                              log10.hra >= 3.65 & log10.hra <= 4.59 ~ "medium",
-                                              log10.hra >= 4.59 & log10.hra <= 6.02 ~ "large",
-                                              log10.hra >= 6.02 & log10.hra <= 9.55 ~ "elarge"))
+  mutate(range_category=case_when(log10.hra<3.65 ~ "very_small",
+                                  log10.hra>=3.65 & log10.hra<=4.59 ~ "small",
+                                  log10.hra>=4.59 & log10.hra<=6.02 ~ "medium",
+                                  log10.hra>=6.02 ~ "large"))
+homerange %>% 
+  select(range_category)
 ```
 
-```{r}
-glimpse(homerange)
-```
+2. How many and which taxonomic classes are represented in each of the `range_category` classes?
 
 
 ```{r}
 homerange %>% 
-  ggplot(aes(x = range_category, fill = class)) +
-  geom_bar(position="dodge")
-  labs(title = "Observations by Taxon and Range Category in Homerange Data",
-       x = "Mass Category",
-       fill = "class")
+  ggplot(aes(x=range_category, fill=class))+
+  geom_bar(position="dodge", alpha=0.6, color="black")+
+  labs(title="Observations by Range Category",
+       x="Range Category",
+       y="Class")
 ```
 
 3. Isolate the small `range_category` and plot the range of `log10.mass` by taxonomic class.
 ```{r}
-
+homerange %>% 
+  filter(range_category=="small") %>% 
+  ggplot(aes(x=class, y= log10.mass, fill=class))+
+  geom_boxplot()
 ```
 
 ## That's it, let's take a break!  
