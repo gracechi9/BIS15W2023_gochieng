@@ -3,10 +3,11 @@ title: "Data Visualization: `ggplot` part 1"
 date: "02:09:2023"
 author: "Grace Ochieng"
 output:
-  html_document:
+  html_document: 
     theme: spacelab
     toc: yes
     toc_float: yes
+    keep_md: yes
   pdf_document:
     toc: yes
 ---
@@ -100,16 +101,9 @@ homerange <- read_csv(here("lab9", "data", "Tamburelloetal_HomeRangeDatabase.csv
 ## Practice
 1. What is the structure of the `homerange` data? Does it have any NA's? Is it tidy? Do a quick exploratory analysis of your choice below.
 ```{r}
-structure(homerange)
-```
-```{r}
-is.na(homerange)
-# produces a long messy revelation of each NA in the data
+glimpse(homerange)
 ```
 
-```{r}
-anyNA(homerange)
-```
 ```{r}
 naniar::miss_var_summary(homerange)
 # number of NA in each variable
@@ -142,11 +136,13 @@ ggplot(data=homerange,mapping=aes(x=log10.mass, y=log10.hra))+
 ### Practice
 1. What is the relationship between log10.hra and log10.preymass? What do you notice about how ggplot treats NA's?
 ```{r}
-ggplot(data=homerange,mapping=aes(x=log10.hra, y=log10.preymass))+geom_point()# ggplot remove NA in the data our pllot basically deleted them and did nto plot them 
+names(homerange)# ggplot remove NA in the data our pllot basically deleted them and did nto plot them 
 ```
 
 ```{r}
-ggplot(data=homerange,mapping=aes(x=log10.hra,y=log10.preymass))+geom_point(na.rm=T)+geom_smooth(method=lm,se= T)
+ggplot(data=homerange,mapping=aes(x=log10.hra,y=log10.preymass))+
+  geom_point(na.rm=T)+
+  geom_smooth(method=lm,se= T)
 ```
 
 ### Bar Plot: `geom_bar()`
@@ -199,32 +195,37 @@ homerange %>%
 ## Practice
 1. Filter the `homerange` data to include `mammals` only.
 ```{r}
-homerange_mam<-
-  homerange %>% 
-  filter(taxon=="mammals")
-homerange_mam
+names(homerange)
 ```
 ```{r}
-# different code used by professor
+homerange %>% 
+  filter(class=="mammalia")
 ```
 
 
 2. Are there more herbivores or carnivores in mammals? Make a bar plot that shows their relative numbers.
 ```{r}
-homerange_mam %>%
-  ggplot(aes(x=trophic.guild)) + 
-  geom_bar()
-# more herbivores
+homerange %>% 
+  filter(class=="mammalia") %>% 
+  count(trophic.guild)
+```
+```{r}
+homerange %>% 
+  filter(class=="mammalia") %>% 
+  count(trophic.guild) %>% 
+  ggplot(aes(x=trophic.guild, y=n))+
+  geom_col()
+# or replace the geom_col line with /geom_bar(stat="identity")
 ```
 
 
 3. Make a bar plot that shows the masses of the top 10 smallest mammals.
 ```{r}
-#homerange_mam %>% 
-# top_n(-10,log10.mass) %>% 
- # ggplot(aes(x=common.name, y=log10.mass))+
- # geom_col()+
- # cord(flipped_names())
+homerange %>% 
+ top_n(-10,log10.mass) %>% 
+  ggplot(aes(x=common.name, y=log10.mass))+
+  geom_col()+
+  coord_flip()
               
 ```
 

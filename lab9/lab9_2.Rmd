@@ -46,8 +46,9 @@ Make this output more visual by adding a plot...
 ```{r}
 
 penguins %>% 
-  ggplot(aes(x=island)) + 
-  geom_bar()
+  count(island) %>% 
+  ggplot(aes(x=island, y=n)) + 
+  geom_col()
 ```
 
 What if we wanted a plot that showed the number of measured penguins for each species?
@@ -57,12 +58,11 @@ penguins %>% count(species)
 
 ```{r}
 penguins %>% 
-  ggplot(aes(x=species)) + 
-  geom_bar()
+  count(species) %>% 
+  ggplot(aes(x=species, y=n)) + 
+  geom_col()
 ```
-count(island)
-ggplot(aes(x=specises,y=n))+
-geom_col()
+
 
 How about average bill length by sex?
 ```{r}
@@ -73,7 +73,12 @@ penguins %>%
 ```
 
 ```{r}
-
+penguins %>% 
+  filter(sex!="NA") %>% 
+  group_by(sex) %>% 
+  summarise(ave_bill_length=mean(bill_length_mm)) %>% 
+  ggplot(aes(x=sex, y=ave_bill_length)) + 
+  geom_col()
 ```
 
 ## Box Plots
@@ -100,8 +105,11 @@ homerange %>%
 
 Make this output more visual by making a plot...
 ```{r}
-
+homerange %>% 
+  ggplot(aes(x = class, y = log10.mass)) +
+  geom_boxplot()
 ```
+
 
 ## Practice
 1. There are more herbivores than carnivores in the homerange data, but how do their masses compare? Make a summary and boxplot that compares their masses. Use `log10.mass`.
