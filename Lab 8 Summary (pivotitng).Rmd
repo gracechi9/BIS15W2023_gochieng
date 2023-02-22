@@ -1,0 +1,460 @@
+---
+title: "Lecture 8 Summary - 'Tidy Pivot longer & Pivot wider'"
+author: "Grace Ochieng"
+date: "`r Sys.Date()`"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+8.1 
+## Tidy data
+Most "wild" data that you will encounter are organized incorrectly for work in R and, as you might expect, the tools used to transform data are a core part of the tidyverse. I will attempt to summarize the most important points below, but you should read [chapter 12 of the data science text](https://r4ds.had.co.nz/tidy-data.html) for a more thorough explanation.  
+
+`Tidy` data in the sense of the tidyverse follows three conventions:   
+(1) each variable has its own column  
+(2) each observation has its own row  
+(3) each value has its own cell  
+
+This is summarized in the image below. The package used to tidy data is called **tidyr** and is a core part of the tidyverse.  
+![*Tidy Data.*](tidy-1.png)
+
+## `pivot_longer()`  
+Scientists frequently use spreadsheets that are organized to make data entry efficient. This is often referred to as **wide format**. Unfortunately, the wide format creates a problem because column names may actually represent values of a variable. The command `pivot_longer()` shifts data from wide to long format.   
+
+Rules:  
++ `pivot_longer`(cols, names_to, values_to)
++ `cols` - Columns to pivot to longer format
++ `names_to` - Name of the new column; it will contain the column names of gathered columns as values
++ `values_to` - Name of the new column; it will contain the data stored in the values of gathered columns
+
+## Example 1: column names are data
+The following data show results from a drug trial with four treatments on six patients. The values represent resting heart rate.  
+```{r}
+#heartrate <- read_csv("data/heartrate.csv")
+#heartrate
+# loading the data sometimes requires you to specify where your working ie we are currently at the general directory
+```
+
+Want to try the `here` package(https://here.r-lib.org/index.html)? I have found that many new R users have difficulty managing directories and accessing files. The `here` package makes this a bit more intuitive.
+```{r}
+getwd()
+```
+
+```{r}
+here()
+# it always puts you in the main directory
+```
+
+```{r}
+heartrate <- read_csv(here("lab8", "data2", "heartrate.csv"))
+
+# you need reader here just makes sure that the data. note that everything is sensitive so if you were to search your directory and lab 8 was included DO NOT write it while using here
+```
+
+```{r}
+heartrate
+
+# always load the data to view
+```
+
+Let's assess whether or not these data are tidy.  
+(1) each variable has its own column?  
+ - by looking at the data no the a b c d ar different drugs  
+(2) each observation has its own row?  
+- yes
+(3) each value has its own cell?  
+- yes
+To fix this problem, we need to reshape the table to long format while keeping track of column names and values. We do this using `pivot_longer()`. Notice that the dimensions of the data frame change.  
+```{r}
+heartrate %>% 
+  pivot_longer(-patient, # patient will ot be removed
+               names_to="drug", # make a new column name to drug
+               values_to = "heartrate" #values moved to anew column names 
+               )
+```
+
+## Practice
+1. Import the file `relig_income.csv` and store it as a new object `relig_income`.  
+
+
+```{r}
+relig_income <- read_csv("lab8/data/relig_income.csv")
+relig_income
+```
+
+2. Why are these data untidy?  
+- These values are not tidy because each variable did not have their own rows or example the income gained is listed as a row instead of a column
+
+3. Use `pivot_longer()` to make the data tidy.  
+```{r}
+relig_income %>% 
+  pivot_longer(-religion, # religion will ot be removed
+               names_to="income", # make a new column name to income
+               values_to = "n_income_ob" #values moved to a new column name numer of observations for each
+               )
+```
+
+## Example 2: some column names are data
+Some (but not all) of the column names are data. We also have NA's.
+```{r}
+billboard <- readr::read_csv("lab8/data/billboard.csv")
+billboard
+```
+
+Solution 1: specify a range of columns that you want to pivot.
+```{r}
+billboard2 <- 
+  billboard %>% 
+  pivot_longer(wk1:wk76, # this is specifiying a range of columns
+               names_to = "week",
+               values_to = "rank",
+               values_drop_na = TRUE #this will drop the NA's and cut back anywhere the sng fel of he chart
+               )
+billboard2
+```
+
+Solution 2: OR, specify columns that you want to stay fixed.
+```{r}
+billboard3 <- 
+  billboard %>% 
+  pivot_longer(-c(artist, track, date.entered), #specific columns
+               names_to = "week",
+               values_to = "rank",
+               values_drop_na = TRUE
+               )
+billboard3
+```
+
+Solution 3: identify columns by a prefix, remove the prefix and all NA's.
+```{r}
+billboard %>% 
+   pivot_longer(
+   cols = starts_with("wk"),
+   names_to = "week",
+   names_prefix = "wk",
+   values_to = "rank",
+   values_drop_na = TRUE)
+# alll these examples make data frame much biggger on one end but ow we  hae a simplified version 
+```
+
+## Practice  
+1. Import `plant_data.csv` as a new object `plant_data`.  
+```{r}
+plant_data <- read_csv("lab8/data/plant_data.csv")
+plant_data
+```
+
+2. Why are these data not tidy?  
+- The days are not represented in the right frame they should also be a variable
+
+3. Use `pivot_longer()` to make the data tidy. Focus the data only on genotype, day, and measurement.  
+```{r}
+plant_data2 <- 
+  plant_data %>% 
+  pivot_longer(-c(genotype, water_sched_prog, greenhouse), #specific columns
+               names_to = "day",
+               values_to = "measurement",
+               values_drop_na = TRUE
+               )
+plant_data2
+```
+
+** Check the Question Above**
+## Example 3: more than one variable in a column name
+In this case, there are two observations in each column name.
+```{r}
+qpcr_untidy <- read_csv("lab8/data/qpcr_untidy.csv")
+qpcr_untidy
+```
+
+`names_sep` helps pull these apart, but we still have "exp" and "rep" to deal with.  
+```{r}
+qpcr_untidy %>% 
+  pivot_longer(
+    exp1_rep1:exp3_rep3,
+    names_to= c("experiment", "replicate"),
+    names_sep="_",
+    values_to="mRNA_expression"
+  )
+```
+
+## Example 4: more than one value or observation in a row
+This is often caused by an entry error, but R will not be able to work with it unless the values are separated. This doesn't use `pivot_longer()` but is a common problem.  
+```{r}
+length_data <- readr::read_csv("lab8/data/length_data.csv")
+length_data
+```
+
+```{r}
+length_data %>% 
+  transform(length = str_split(length, ";")) %>%
+  unnest(length)
+```
+
+8.2
+## Review
+Last time we learned the fundamentals of tidy data and used the `pivot_longer()` function to wrangle a few examples of frequently encountered untidy data. In the second part of today's lab we will look at a few more examples of `pivot_longer()` but also use the `pivot_wider()` function to deal with another type of untidy data.  
+
+## Load the tidyverse
+```{r}
+library("tidyverse")
+```
+
+## `pivot_longer()`
+Recall that we use `pivot_longer()` when our column names actually represent variables. A classic example would be that the column names represent observations of a variable.
+```{r}
+datasets::USPersonalExpenditure
+?USPersonalExpenditure
+```
+
+Here we add a new column of expenditure types, which are stored as rownames above, with `mutate()`. The `USPersonalExpenditures` data also needs to be converted to a data frame before we can use the tidyverse functions, because it comes as a matrix.
+```{r}
+expenditures <- 
+  USPersonalExpenditure %>% 
+  as_tibble() %>% 
+  mutate(expenditure = rownames(USPersonalExpenditure))
+expenditures
+```
+
+## Practice
+1. Are these data tidy? Please use `pivot_longer()` to tidy the data.
+```{r}
+expenditures %>% 
+  pivot_longer(c(-expenditure), #specific columns
+               names_to = "year",
+               values_to = "total_measure",
+               values_drop_na = TRUE
+               )
+  
+```
+
+2. Restrict the data to medical and health expenditures only. Sort in ascending order.
+```{r}
+expenditures %>% 
+  pivot_longer(c(-expenditure), #specific columns
+               names_to = "year",
+               values_to = "bn_dollars") %>% 
+  filter(expenditure=="Medical and Health") %>% 
+  arrange(-bn_dollars)
+```
+
+## `separate()`
+In this new heart rate example, we have the sex of each patient included with their name. Are these data tidy? No, there is more than one value per cell in the patient column and the columns a, b, c, d once again represent values.
+```{r}
+heartrate2 <- readr::read_csv("lab8/data/heartrate2.csv")
+heartrate2 # first f all eww its not a tidy data we need a column for durgs and sex is an observation
+```
+
+We need to start by separating the patient names from their sexes. `separate()` needs to know which column you want to split, the names of the new columns, and what to look for in terms of breaks in the data.
+```{r}
+heartrate2 %>% 
+  separate(patient, into= c("patient", "sex"), sep = "_")
+```
+
+## Practice
+1. Re-examine `heartrate2`. Use `separate()` for the sexes, `pivot_longer()` to tidy, and `arrange()` to organize by patient and drug. Store this as a new object `heartrate3`.  
+```{r}
+heartrate3 <- heartrate2 %>% 
+  separate(patient, into= c("patient", "sex"), sep = "_") %>% 
+  pivot_longer(-c(patient, sex),
+               names_to = "drug",
+               values_to = "heartrate"
+               )
+```
+
+
+2. `unite()` is the opposite of separate(). Its syntax is straightforward. You only need to give a new column name and then list the columns to combine with a separation character.  Give it a try below by recombining patient and sex from `heartrate3`.  
+```{r}
+heartrate3 %>% 
+  unite(patient_sex, "patient", "sex", sep=" ")
+```
+
+
+## `pivot_wider()`
+The opposite of `pivot_longer()`. You use `pivot_wider()` when you have an observation scattered across multiple rows. In the example below, `cases` and `population` represent variable names not observations.  
+
+Rules:  
++ `pivot_wider`(names_from, values_from)  
++ `names_from` - Values in the `names_from` column will become new column names  
++ `values_from` - Cell values will be taken from the `values_from` column  
+
+```{r}
+tb_data <- read_csv("lab8/data/tb_data.csv")
+tb_data
+```
+
+When using `pivot_wider()` we use `names_from` to identify the variables (new column names) and `values_from` to identify the values associated with the new columns.
+```{r}
+tb_data %>% 
+  pivot_wider(names_from = "key", #the observations under key will become new columns
+              values_from = "value")
+#The variable key turned to a colum names and the values are now their input
+```
+
+## Practice
+1. Load the `gene_exp.csv` data as a new object `gene_exp`. Are these data tidy? Use `pivot_wider()` to tidy the data.
+```{r}
+gene_exp <- read_csv("lab8/data/gene_exp.csv")
+gene_exp
+```
+
+```{r}
+gene_exp %>% 
+  pivot_wider(names_from = "type", #the observations under type will become new columns
+              values_from = "L4_values")
+```
+
+## `pivot_wider()` with multiple variables  
+What happens when we want to use `pivot_wider()` with multiple columns?
+```{r}
+edu_level <- readr::read_csv("lab8/data/education_level.csv")
+edu_level
+```
+
+We want to pivot the `edu_level` data such that there is only a single row per demographic. 
+```{r}
+edu_level %>% 
+pivot_wider(names_from = (education_level), #new column names come from the education_level column
+                values_from = c(mean_income, n)) #values come from two separate columns
+```
+
+## Practice
+For the last practice example, I will use data from the awesome [R Ladies Sydney](https://rladiessydney.org/courses/ryouwithme/02-cleanitup-5/) blog. This data set is compiled by the NSW Office of Environment and Heritage contains the enterococci counts in water samples obtained from Sydney beaches as part of the Beachwatch Water Quality Program! The data set we’ll be working with is current as of October 13th 2018.  
+
+1. Load the beachbugs data and have a look.
+```{r}
+beachbugs <- readr::read_csv("lab8/data/beachbugs_long.csv")
+beachbugs
+```
+
+2. Use `pivot_wider` to transform the data into wide format.
+```{r}
+beachbugs_wide<-beachbugs %>% 
+  pivot_wider(names_from = "site", 
+              values_from = "buglevels")
+# created a new vaule known as beach bugs wide then we use the now knew value to pivot_longrr
+```
+
+```{r}
+beachbugs_wide
+```
+
+3. Now, use `pivot_longer` to transform them back to long!
+
+```{r}
+beachbugs_wide%>% 
+  pivot_longer(-c(year), #specific columns
+               names_to = "beach",
+               values_to = "buglevels",
+               )
+# in this code you reversed back
+```
+
+## Homework 8 ##
+1. Start by loading the data `sydneybeaches`. Do some exploratory analysis to get an idea of the data structure.
+
+```{r}
+sydneybeaches <-readr::read_csv("lab8/data/sydneybeaches.csv")
+sydneybeaches
+
+```
+If you want to try `here`, first notice the output when you load the `here` library. It gives you information on the current working directory. You can then use it to easily and intuitively load files.
+```{r}
+library(here)
+```
+
+The quotes show the folder structure from the root directory.
+```{r}
+sydneybeaches <-read_csv(here("lab8", "data", "sydneybeaches.csv")) %>% janitor::clean_names()
+sydneybeaches
+```
+
+2. Are these data "tidy" per the definitions of the tidyverse? How do you know? Are they in wide or long format?
+```{r}
+# I think its tidy in the general term, each variable has its own column, each observation has its own row and each value has its own cell
+```
+
+
+3. We are only interested in the variables site, date, and enterococci_cfu_100ml. Make a new object focused on these variables only. Name the object `sydneybeaches_long`
+```{r}
+sydneybeaches_long<-
+  sydneybeaches %>%
+  select(site,date,enterococci_cfu_100ml)
+sydneybeaches_long
+```
+4. Pivot the data such that the dates are column names and each beach only appears once. Name the object `sydneybeaches_wide`
+```{r}
+sydneybeaches_wide<-
+  sydneybeaches %>% 
+  pivot_wider(names_from = "date",
+               values_from= "enterococci_cfu_100ml")
+sydneybeaches_wide
+```
+
+5. Pivot the data back so that the dates are data and not column names.
+
+```{r}
+  sydneybeaches_wide %>% 
+  pivot_longer(names_to = "date",
+               values_to= "enterococci_cfu_100ml",
+              cols= contains("/"))
+```
+
+6. We haven't dealt much with dates yet, but separate the date into columns day, month, and year. Do this on the `sydneybeaches_long` data.
+```{r}
+sydneybeaches_long %>% 
+  separate(date, into= c("day","month","year"))
+```
+
+
+7. What is the average `enterococci_cfu_100ml` by year for each beach. Think about which data you will use- long or wide.
+```{r}
+enterococci_av <- sydneybeaches_long %>%
+  separate(date, into = c("day", "month", "year")) %>%
+  group_by(site, year) %>%
+  summarize(average_enterococci = mean(enterococci_cfu_100ml, na.rm = T))
+enterococci_av
+```
+
+
+8. Make the output from question 7 easier to read by pivoting it to wide format.
+```{r}
+enterococci_average_wide <- enterococci_av %>%
+  pivot_wider(
+    names_from = "site",
+    values_from = "average_enterococci"
+  )
+enterococci_average_wide
+```
+
+
+9. What was the most polluted beach in 2018?
+```{r}
+enterococci_av %>%
+  filter(year == 2018) %>%
+  arrange(desc(average_enterococci))
+# South Maroubra Rockpool
+```
+
+
+## Wrap-up  
+Good luck on the upcoming midterm and remeber if it looks wide originally we want to pivot_longer and vise versa. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
