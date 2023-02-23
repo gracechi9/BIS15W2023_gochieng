@@ -156,15 +156,62 @@ participants %>%
 ![](midterm_2_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 
-3. CHECK(2 points) What is the mean age of participants by gender? (hint: please provide a number for each) Since only three participants do not have gender indicated, remove these participants from the data.
+3. (2 points) What is the mean age of participants by gender? (hint: please provide a number for each) Since only three participants do not have gender indicated, remove these participants from the data.
+
+```r
+age_surgery<-
+  na.omit(surgery) %>% 
+  group_by(gender)
+surgery
+```
+
+```
+## # A tibble: 32,001 × 25
+##    ahrq_ccs   age gender race      asa_s…¹   bmi basel…² basel…³ basel…⁴ basel…⁵
+##    <chr>    <dbl> <chr>  <chr>     <chr>   <dbl> <chr>   <chr>   <chr>   <chr>  
+##  1 <Other>   67.8 M      Caucasian I-II     28.0 No      Yes     No      No     
+##  2 <Other>   39.5 F      Caucasian I-II     37.8 No      Yes     No      No     
+##  3 <Other>   56.5 F      Caucasian I-II     19.6 No      No      No      No     
+##  4 <Other>   71   M      Caucasian III      32.2 No      Yes     No      No     
+##  5 <Other>   56.3 M      African … I-II     24.3 Yes     No      No      No     
+##  6 <Other>   57.7 F      Caucasian I-II     40.3 No      Yes     No      No     
+##  7 <Other>   56.6 M      Other     IV-VI    64.6 No      Yes     No      Yes    
+##  8 <Other>   64.2 F      Caucasian III      43.2 No      Yes     No      No     
+##  9 <Other>   66.2 M      Caucasian III      28.0 No      Yes     No      No     
+## 10 <Other>   20.1 F      Caucasian I-II     27.4 Yes     No      No      No     
+## # … with 31,991 more rows, 15 more variables: baseline_digestive <chr>,
+## #   baseline_osteoart <chr>, baseline_psych <chr>, baseline_pulmonary <chr>,
+## #   baseline_charlson <dbl>, mortality_rsi <dbl>, complication_rsi <dbl>,
+## #   ccsmort30rate <dbl>, ccscomplicationrate <dbl>, hour <dbl>, dow <chr>,
+## #   month <chr>, moonphase <chr>, mort30 <chr>, complication <chr>, and
+## #   abbreviated variable names ¹​asa_status, ²​baseline_cancer, ³​baseline_cvd,
+## #   ⁴​baseline_dementia, ⁵​baseline_diabetes
+```
+
+4. (SIPPED)(3 points) Make a plot that shows the range of age associated with gender.
+
+```r
+#age_surgery %>% 
+#  ggplot(aes(x=gender, y=avg_age))+
+#  geom_col()
+```
 
 
-4. (3 points) Make a plot that shows the range of age associated with gender.
+5. (Check) (2 points) How healthy are the participants? The variable `asa_status` is an evaluation of patient physical status prior to surgery. Lower numbers indicate fewer comorbidities (presence of two or more diseases or medical conditions in a patient). Make a plot that compares the number of `asa_status` I-II, I-II, and IV-V.
 
+```r
+asa_surgery<-surgery %>% 
+  group_by(asa_status) %>% 
+    count(asa_status) 
+```
 
+```r
+asa_surgery %>% 
+  ggplot(aes(x=asa_status, y=n))+
+  geom_col()
+```
 
-5. (2 points) How healthy are the participants? The variable `asa_status` is an evaluation of patient physical status prior to surgery. Lower numbers indicate fewer comorbidities (presence of two or more diseases or medical conditions in a patient). Make a plot that compares the number of `asa_status` I-II, III, and IV-V.
-
+![](midterm_2_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
 6. (3 points) Create a plot that displays the distribution of body mass index for each `asa_status` as a probability distribution- not a histogram. (hint: use faceting!)
 
@@ -179,7 +226,7 @@ surgery %>%
 ## Warning: Removed 3290 rows containing non-finite values (`stat_density()`).
 ```
 
-![](midterm_2_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](midterm_2_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 The variable `ccsmort30rate` is a measure of the overall 30-day mortality rate associated with each type of operation. The variable `ccscomplicationrate` is a measure of the 30-day in-hospital complication rate. The variable `ahrq_ccs` lists each type of operation.  
 
@@ -187,24 +234,54 @@ The variable `ccsmort30rate` is a measure of the overall 30-day mortality rate a
 
 ```r
 surgery %>% 
-  select(mortality_rsi,ahrq_ccs) %>% 
-  group_by(mortality_rsi) %>% 
-  arrange(desc(mortality_rsi)) %>% 
-  head(n=5)
+  group_by(ahrq_ccs) %>% 
+  count(ccscomplicationrate) %>%
+  arrange(desc(ccscomplicationrate)) 
 ```
 
 ```
-## # A tibble: 5 × 2
-## # Groups:   mortality_rsi [5]
-##   mortality_rsi ahrq_ccs                          
-##           <dbl> <chr>                             
-## 1          4.86 Colorectal resection              
-## 2          4.83 Hip replacement; total and partial
-## 3          4.73 Colorectal resection              
-## 4          4.71 <Other>                           
-## 5          4.51 Hip replacement; total and partial
+## # A tibble: 23 × 3
+## # Groups:   ahrq_ccs [23]
+##    ahrq_ccs                                  ccscomplicationrate     n
+##    <chr>                                                   <dbl> <int>
+##  1 Small bowel resection                                   0.466   620
+##  2 Colorectal resection                                    0.312  2519
+##  3 Nephrectomy; partial or complete                        0.197  2894
+##  4 Gastrectomy; partial and total                          0.190   394
+##  5 Spinal fusion                                           0.183  2694
+##  6 Hysterectomy; abdominal and vaginal                     0.151  2548
+##  7 Other hernia repair                                     0.143  1242
+##  8 Oophorectomy; unilateral and bilateral                  0.135   576
+##  9 Open prostatectomy                                      0.109  2679
+## 10 Laminectomy; excision intervertebral disc               0.106  2535
+## # … with 13 more rows
 ```
 
+
+```r
+surgery %>% 
+  group_by(ahrq_ccs) %>% 
+  count(ccsmort30rate) %>%
+  arrange(desc(ccsmort30rate)) 
+```
+
+```
+## # A tibble: 23 × 3
+## # Groups:   ahrq_ccs [23]
+##    ahrq_ccs                                             ccsmort30rate     n
+##    <chr>                                                        <dbl> <int>
+##  1 Colorectal resection                                       0.0167   2519
+##  2 Small bowel resection                                      0.0129    620
+##  3 Gastrectomy; partial and total                             0.0127    394
+##  4 Endoscopy and endoscopic biopsy of the urinary tract       0.00811   370
+##  5 Spinal fusion                                              0.00742  2694
+##  6 Hip replacement; total and partial                         0.00740  2298
+##  7 Genitourinary incontinence procedures                      0.00433   462
+##  8 <Other>                                                    0.00425   941
+##  9 Other hernia repair                                        0.00403  1242
+## 10 Arthroplasty knee                                          0.00296  3379
+## # … with 13 more rows
+```
 8. (3 points) Make a plot that compares the `ccsmort30rate` for all listed `ahrq_ccs` procedures.
 
 ```r
@@ -214,26 +291,79 @@ p <- surgery %>%
 p
 ```
 
-![](midterm_2_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![](midterm_2_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
 
-9. (4 points) When is the best month to have surgery? Make a chart that shows the 30-day mortality and complications for the patients by month. `mort30` is the variable that shows whether or not a patient survived 30 days post-operation.
+9.(CHECK) (4 points) When is the best month to have surgery? Make a chart that shows the 30-day mortality and complications for the patients by month. `mort30` is the variable that shows whether or not a patient survived 30 days post-operation.
 
 ```r
 surgery %>% 
-  ggplot(aes(x=complication, y=mort30, fill=month))+
-  geom_boxplot(alpha=0.4)+
-  facet_wrap(~month)+
-  theme(axis.text.x = element_text(angle = 10, hjust = 1))+
-    labs(title = "30 Day mortality and complications for the patients by month",
-       x = NULL,
-       y = "Mort30",
-       fill = "Month")
+  group_by(month) %>% 
+  mutate(months_surgery=if_else(mort30=="Yes",1,0)) %>% 
+  summarise(sum=sum(months_surgery))
 ```
 
-![](midterm_2_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+```
+## # A tibble: 12 × 2
+##    month   sum
+##    <chr> <dbl>
+##  1 Apr      12
+##  2 Aug       9
+##  3 Dec       4
+##  4 Feb      17
+##  5 Jan      19
+##  6 Jul      12
+##  7 Jun      14
+##  8 Mar      12
+##  9 May      10
+## 10 Nov       5
+## 11 Oct       8
+## 12 Sep      16
+```
+
+```r
+m<-surgery %>% 
+  group_by(month) %>% 
+  mutate(months_surgery=if_else(mort30=="Yes",1,0)) %>% 
+  summarise(sum=sum(months_surgery))
+```
 
 10. (4 points) Make a plot that visualizes the chart from question #9. Make sure that the months are on the x-axis. Do a search online and figure out how to order the months Jan-Dec.
+
+```r
+m %>% 
+  ggplot(aes(x=month, y=sum))+
+  geom_col()
+```
+
+![](midterm_2_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+
+```r
+m
+```
+
+```
+## # A tibble: 12 × 2
+##    month   sum
+##    <chr> <dbl>
+##  1 Apr      12
+##  2 Aug       9
+##  3 Dec       4
+##  4 Feb      17
+##  5 Jan      19
+##  6 Jul      12
+##  7 Jun      14
+##  8 Mar      12
+##  9 May      10
+## 10 Nov       5
+## 11 Oct       8
+## 12 Sep      16
+```
+
+```r
+# January
+```
+
 
 Please provide the names of the students you have worked with with during the exam:
 
