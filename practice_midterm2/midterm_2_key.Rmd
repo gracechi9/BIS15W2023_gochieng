@@ -36,15 +36,15 @@ For this assignment, we are going to use data from  [gapminder](https://www.gapm
 3. life_expectancy_years.csv  
 
 ```{r}
-population <- read_csv(here("midterm2", "data", "population_total.csv"))
+population <- read_csv(here("practice_midterm2", "data", "population_total.csv"))
 ```
 
 ```{r}
-income <- read_csv(here("midterm2", "data", "income_per_person_gdppercapita_ppp_inflation_adjusted.csv"))
+income <- read_csv(here("practice_midterm2", "data", "income_per_person_gdppercapita_ppp_inflation_adjusted.csv"))
 ```
 
 ```{r}
-life_expectancy <- read_csv(here("midterm2", "data", "life_expectancy_years.csv"))
+life_expectancy <- read_csv(here("practice_midterm2", "data", "life_expectancy_years.csv"))
 ```
 
 1. (3 points) Once you have an idea of the structure of the data, please make each data set tidy (hint: think back to pivots) and store them as new objects. You will need both the original (wide) and tidy (long) data!  
@@ -174,7 +174,7 @@ _India and China_
 
 ```{r}
 population %>% 
-  filter(country=="India" | country=="China" | country=="Pakistan" | country=="Indonesia" | country=="Nigeria") %>% 
+  filter(country=="India" | country=="China" | country=="Pakistan" | country=="Indonesia" | country=="United States") %>% 
   pivot_longer(-country,
                names_to = "year",
                values_to="population") %>% 
@@ -228,18 +228,21 @@ income %>%
 life_expectancy_100 <- 
   life_expectancy_long %>% 
   filter(between(year, 1920, 2020))
+life_expectancy_100
 ```
 
 ```{r}
 population_100 <- 
   population_long %>% 
   filter(between(year, 1920, 2020))
+population_100
 ```
 
 ```{r}
 income_100 <- 
   income_long %>% 
   filter(between(year, 1920, 2020))
+income_100
 ```
 
 ```{r}
