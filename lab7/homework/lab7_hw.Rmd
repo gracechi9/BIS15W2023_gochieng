@@ -71,7 +71,7 @@ summary(amniota)
 
 `amphibio`  
 ```{r}
-amphibio %>% 
+disamphibio %>% 
   summarize(number_nas = sum(is.na(amphibio)))
 ```
 
