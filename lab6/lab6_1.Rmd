@@ -3,10 +3,12 @@ title: "`summarize()`, `tabyl()`, and `group_by()`"
 author: "Grace Ochieng"
 date: "2023:26:1"
 output:
-  html_document:
+  html_document: 
     theme: spacelab
     toc: yes
     toc_float: yes
+    self_contained: no
+    keep_md: yes
   pdf_document:
     toc: yes
 ---
@@ -193,18 +195,37 @@ msleep %>%
 1. Calculate mean brain weight by taxonomic order in the msleep data.
 ```{r}
 msleep %>% 
-  group_by(order) %>% 
-  summarise(mean_brainwt=mean(brainwt))
+msleep %>%
+  group_by(order) %>%
+  summarize(min_brainwt = min(brainwt),
+            max_brainwt = max(brainwt),
+            mean_brainwt = mean(brainwt),
+            total=n())
 ```
 
 2. What does `NA` mean? How are NA's being treated by the summarize function?
+```{r}
+# Na usually means inpouts that were not found/ collected and summarize tends to count for it as well (unless we specifically tell R to identify it and remove it)
+```
 
 
 3. Try running the code again, but this time add `na.rm=TRUE`. What is the problem with Cetacea? Compare this to Carnivora. 
 
 
 ```{r}
+msleep %>%
+  group_by(order) %>%
+  summarize(min_brainwt = min(brainwt,na.rm=TRUE),
+            max_brainwt = max(brainwt,na.rm=TRUE),
+            mean_brainwt = mean(brainwt,na.rm=TRUE),
+            total=n())
+```
 
+```{r}
+msleep %>% 
+  filter( order == "Cetacea") %>% 
+  select(brainwt)
+# unfortunately this order had no data inoutted thus we see the values missing
 ```
 
 ## That's it! Let's take a break and then move on to part 2! 
