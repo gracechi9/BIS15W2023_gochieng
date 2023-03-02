@@ -1,7 +1,10 @@
 ---
 title: "Intro to Shiny Part 2"
-date: "`r Sys.Date()`"
+author: "Grace Ochieng"
+date: "01/03/2023"
 output:
+  html_notebook: 
+    toc: yes
   html_document:
     theme: spacelab
     toc: yes
@@ -281,6 +284,102 @@ wolves %>%
   facet_wrap(~pop)
 ```
 
+```{r}
+names(wolves)
+```
+
+```{r}
+glimpse(wolves)
+```
+
+```{r}
+ wolves %>% 
+  filter(sex!="NA") %>% 
+  ggplot(aes(x=sex, fill=sex))+
+  geom_bar()+
+  facet_wrap(~pop)
+```
+
+
+```{r}
+# code trying to build a shiny app in which a distiction between sex by population during selected year. I believe I created an app but please note that app might not be fully accurate
+ui <- dashboardPage(
+  dashboardHeader(title = "Pack size by Sex In 2000-1010"),#UC Campus Admissions by Ethnicity 2010-2019
+  dashboardSidebar(),
+  dashboardBody(
+  fluidRow(
+  box(title = "Plot Options", width = 3,
+  radioButtons("x", "Select Year", choices = c("2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009","2010"), 
+              selected = "2010"),
+  selectInput("y", "Select Population", choices = c("AK.PEN", "BAN.JAS", "BC", "DENALI", "ELLES", "GTNP", "INT.AK", "MEXICAN", "MT"),
+              selected = "AK.PEN"),
+  selectInput("z", "Select Sex", choices = c("Female", "Male"),
+              selected = "Female")
+  ), # close the first box
+  box(title = "Ratio", width = 7,
+  plotOutput("plot", width = "600px", height = "500px")
+  ) # close the second box
+  ) # close the row
+  ) # close the dashboard body
+) # close the ui
+
+server <- function(input, output, session) { 
+  
+  output$plot <- renderPlot({
+    ggplot(data=wolves, aes_string(x="pop", fill=input$x))+
+      geom_bar(position="dodge", alpha=0.8, color="black")+
+      theme_light(base_size = 18) +
+      theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+      labs(x = "Sex", y = "Number",fill="Fill Variable")
+  })
+  
+  # stop the app when we close it
+  session$onSessionEnded(stopApp)
+
+  }
+
+shinyApp(ui, server)
+
+```
+```{r}
+# using 'shiny dashboard' on the wolves data'
+# This one works well! Provides a clear exploration of the wolves data 
+ui <- dashboardPage(
+  dashboardHeader(title = "Wolves"),
+  dashboardSidebar(disable = T),
+  dashboardBody(
+  fluidRow(
+  box(title = "Plot Options", width = 3,
+  selectInput("x", "Select X Variable", choices = c("standard.habitat", "standard.human", "standard.pop", "standard.packsize", "standard.latitude","standard.longitude"), 
+              selected = "standard.habitat"),
+  selectInput("y", "Select Y Variable", choices = c("standard.habitat", "standard.human", "standard.pop", "standard.packsize", "standard.latitude","standard.longitude"), 
+              selected = "standard.human"),
+   sliderInput("pointsize", "Select the Point Size", min = 1, max = 5, value = 2, step = 0.5)
+  ), # close the first box
+  box(title = "Plot of Wolves Data", width = 7,
+  plotOutput("plot", width = "600px", height = "500px")
+  ) # close the second box
+  ) # close the row
+  ) # close the dashboard body
+) # close the ui
+
+server <- function(input, output, session) { 
+  output$plot <- renderPlot({
+  ggplot(wolves, aes_string(x = input$x, y = input$y, color="pop")) +
+      geom_point(size=input$pointsize, alpha=0.8) + 
+      theme_light(base_size = 18)
+  })
+  session$onSessionEnded(stopApp)
+  }
+
+shinyApp(ui, server)
+```
+
+```{r}
+names(wolves)
+```
+
+      
 ## Wrap-up  
 Please review the learning goals and be sure to use the code here as a reference when completing the homework.
 
