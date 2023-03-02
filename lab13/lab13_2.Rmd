@@ -95,21 +95,31 @@ grizzly <- read_csv("data/bear-sightings.csv")
 
 1. Use the range of the latitude and longitude to build an appropriate bounding box for your map.
 ```{r}
-
+grizzly %>% 
+  select(latitude, longitude) %>% 
+  summary()
+```
+```{r}
+lat <- c(55.02, 70.37)
+long <- c(-166.2, -131.3)
+bbox <- make_bbox(long, lat, f = 0.05)
 ```
 
 2. Load a map from `stamen` in a terrain style projection and display the map.
 ```{r}
-
+map1 <- get_map(bbox, maptype = "terrain", source = "stamen")
 ```
 
 ```{r}
-
+ggmap(map1)
 ```
 
 3. Build a final map that overlays the recorded observations of grizzly bears in Alaska.
 ```{r}
-
+ggmap(map1) + 
+  geom_point(data = grizzly, aes(longitude, latitude)) +
+  labs(x= "Longitude", y= "Latitude", title="Grizzly Locations")
+# only thing to look out for with code is that this file contained two map examples so next time label map1 map2 not to cause confusion within data
 ```
 
 ## Wrap-up  

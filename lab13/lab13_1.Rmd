@@ -42,13 +42,14 @@ files
 We can also get the full path names with `full.names = TRUE`.
 ```{r}
 files <- list.files(path = "data/spiders", pattern = ".csv", full.names = T)
-files
+files # where they are
 ```
 
 Now we want to read each of these files into R without having to do them one at a time because there are quite a few. There are several ways to do this, but a quick and straightforward way is to import them as a list. A list in R is an object which can store multiple other objects of the same or differing types. Lists are common in R so it's useful to be comfortable with them. Let's import our .csv files into a list. The `lapply()` function is a part of the `apply` family of functions. It will iterate over elements of an object, apply a function we specify, and return a list. We have a character vector of file paths, so we want to iterate over all the path names and apply `read_csv()`.  
 
 ```{r, message = FALSE}
-spider_list <- lapply(files, read_csv)
+spider_list <- lapply(files, read_csv) # lappply makes a list and go into the file and read csv
+
 ```
 
 We can view elements in our list with double brackets. Let's view the data for Butte county.
@@ -59,7 +60,40 @@ spider_list[[3]]
 ## Practice
 1. Getting an idea of the structure of lists is a bit tricky, especially when there are many elements. Try exploring the elements in `spider_list` using names(), str(), or glimpse(). For names(), you will need to specify an element using [[]].  
 ```{r}
+#str(spider_list[[3]])
+```
 
+```{r}
+#glimpse(spider_list)
+```
+
+```{r}
+names(spider_list[[3]])
+```
+
+## Naming Lists 
+
+```{r}
+names<- list.files(path="data/spiders", pattern=".csv")
+```
+
+```{r}
+names_list<- strsplit(names, split=".csv")
+```
+
+```{r}
+#names_vec<- unlist()
+```
+
+```{r}
+#names(spider_list) <- names_vec
+#names(spider_list)
+```
+
+## Practice
+1. Access the Alameda county 
+```{r}
+#spider_list()
 ```
 
 ## Merging Files
@@ -96,6 +130,7 @@ Where did customers 3 and 4 go?
 ```{r}
 inner_exampleDF <- inner_join(table_A, table_B, by="customer_ID")
 inner_exampleDF
+# refers to joining between(only common data)
 ```
 
 `left_join`
@@ -103,6 +138,7 @@ Where did customer 4 go? Notice the missing data for customer 3.
 ```{r}
 left_exampleDF <- left_join(table_A, table_B, by="customer_ID")
 left_exampleDF
+# 
 ```
 
 `right_join`
@@ -116,6 +152,7 @@ right_exampleDF
 ```{r}
 full_exampleDF <- full_join(table_A, table_B, by="customer_ID")
 full_exampleDF
+# Joined everything
 ```
 
 `anti_join`
@@ -141,6 +178,7 @@ spiders_with_locs <-
   left_join(spiders_all, spiders_locs, by = "Accession")
 summary(spiders_with_locs)
 names(spiders_with_locs)
+spiders_with_locs
 ```
 
 As a side note, joining data can highlight problems or typos with the data when the join does not go as expected.  
@@ -151,6 +189,7 @@ We now have a single data frame with all of our spider data including locations.
 There is one last thing to change. Did you notice the date column? It seems to be in the format Day/Month/Year. 
 ```{r}
 class(spiders_with_locs$Date)
+glimpse(spiders_with_locs)
 ```
 
 The `lubridate` package was specifically created to deal with dates of all types. There are many useful functions in `lubridate` for working with dates. Please see the excellent tutorial provided by [RichardOnData](https://www.youtube.com/watch?v=VYAo69WdJZg&ab_channel=RichardOnData).
@@ -170,12 +209,12 @@ datetime
 
 We want to change our date column to the standard "YEAR-MO-DA" format that R will recognize as a date. Right now it is listed as day-month-year. We can use the base R function `as.Date()` or the lubridate function `dmy` for this. 
 ```{r}
-dmy(spiders_with_locs$Date)
+dmy(spiders_with_locs$Date) #day month year but this is not clean
 ```
 
 If you want to use base R, then here is the format.
 ```{r}
-as.Date(spiders_with_locs$Date, format = "%d/%m/%y")#not lubridate
+as.Date(spiders_with_locs$Date, format = "%d/%m/%y") #not lubridate
 ```
 `
 There are many different options for working with dates and datetimes in lubridate including `ymd`, `mdy`, `dmy`, `mdy_hms`, `ymd_hms`.
@@ -190,7 +229,19 @@ dateformat5 <- "20200922 170000"
 ## Practice 
 1. Convert each of the examples above using lubridate.
 ```{r}
-
+ymd(dateformat1)
+```
+```{r}
+mdy(dateformat2)
+```
+```{r}
+dmy(dateformat3)
+```
+```{r}
+mdy_hms(dateformat4)
+```
+```{r}
+ymd_hms(dateformat5)
 ```
 
 ## A few more tricks...
