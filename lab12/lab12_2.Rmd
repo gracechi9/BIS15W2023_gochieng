@@ -375,10 +375,6 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
-```{r}
-names(wolves)
-```
-
       
 ## Wrap-up  
 Please review the learning goals and be sure to use the code here as a reference when completing the homework.

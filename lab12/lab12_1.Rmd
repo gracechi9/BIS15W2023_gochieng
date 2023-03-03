@@ -1,6 +1,7 @@
 ---
 title: "Intro to Shiny"
-date: "`r Sys.Date()`"
+author: "Grace Ochieng"
+date: "01/03/2023"
 output:
   html_document:
     theme: spacelab
@@ -31,10 +32,11 @@ Shiny is an R package which makes it easy to design interactive web applications
 library(shiny)
 ```
 
+
 We will also need the `tidyverse` and `palmerpenguins` to run the examples.
 ```{r, echo=FALSE}
 library(tidyverse)
-library("palmerpenguins")
+library(palmerpenguins)
 ```
 
 ## Shiny Example
