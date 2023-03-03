@@ -1,0 +1,65 @@
+---
+title: "Lab 13 Intro"
+date: "`r Sys.Date()`"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library("jpeg")
+```
+
+## Load the libraries
+```{r}
+library("janitor")
+library("tidyverse")
+library("shiny")
+```
+
+## Warm-up
+For this exercise, let's use some data on elephants. These data are from Phyllis Lee, Stirling University, and are related to Lee, P., et al. (2013), "Enduring consequences of early experiences: 40-year effects on survival and success among African elephants (Loxodonta africana)," Biology Letters, 9: 20130011. [kaggle](https://www.kaggle.com/mostafaelseidy/elephantsmf).  
+
+1. Load the data and evaluate its structure. Clean as appropriate.
+```{r}
+elephants<- readr::read_csv("data/ElephantsMF.csv")
+```
+
+2. Make a simple shiny app that produces a scatterplot of age vs. height with reactivity assigned to sex. Make sure to include a title and try to incorporate the reference to the data.
+```{r}
+glimpse(elephants)
+```
+```{r}
+elephants$Sex<- as.factor(elephants$Sex)
+```
+
+```{r}
+elephants %>%
+  ggplot(aes(x = Age, y = Height)) +
+      geom_point()+
+  facet_wrap(~Sex)
+```
+
+
+```{r, eval=F, echo=T}
+Elephants$Sex<- as.factor(Elephants$Sex)
+ui <- fluidPage(
+  titlePanel("Age versus Height"),
+    selectInput("x", "Select X Variable", choices = c("Age"), 
+              selected = "Age"),
+   
+  ) 
+
+  
+server <- function(input, output, session) { 
+  output$plot <- renderPlot({
+  ggplot(Elephants, aes_string(x = input$x, y = input$y, color="Sex")) +
+      geom_point() + 
+      theme_light(base_size = 18)
+  })
+  session$onSessionEnded(stopApp)
+  }
+
+shinyApp(ui, server)
+```
+
+
