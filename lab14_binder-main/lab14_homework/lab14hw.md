@@ -20,12 +20,14 @@ Answer the following questions in RMarkdown. Please embed all of your code and p
 ## Questions
 
 1. Look up 'Data Scientist' at https://www.bls.gov/. What degree is required for this career? Is it a growing occupation?  
-```{r}
+
+```r
 # The degree is ether a Bachelor Science in  either Mathematics, Computer Science or Statistics.
 ```
 
 2. How would you describe your data science skills on a resume for a job application? Write a blurb that reflects the skills you have learned in this course. 
-```{r}
+
+```r
 # Skills
 
  # - Knowledge In programming language such as R
@@ -36,43 +38,50 @@ Answer the following questions in RMarkdown. Please embed all of your code and p
 
 
 3. What are your current career interests, and how could your R skills support that career path? (hint: this might be good content for your LinkedIn profile ;)
-```{r}
+
+```r
 # My career interest are in human biology research and medicine and I thinks skills such as R helps in research and data collection. So far in this class I have heard R being a tool most researchers use to input data and present it, and I think its a unique way to do that alongside research documents.
 ```
 
 
 4. What about this course has been the most difficult for you? What has been the most rewarding?
-```{r}
+
+```r
 # Most difficult part of this course has been really finding extra time and practice. The most rewarding was being able to create my own reposirtory with all the skills learned to refer back to.
 ```
 
 
 5. What do you wish you had known, or what skills do you wish you had, before taking this class.
-```{r}
+
+```r
 # Prior knowledge to coding, even though this was an introductory course.
 ```
 
 
 6. If we had 1 more lab in this class, what would you have liked to learn more about?
-```{r}
+
+```r
 # Maybe a review on ShinyApp I felt as though that concept was very interesting but only a short time was spent in learning it.
 ```
 
 
 7. Now that you have (almost!) completed this course, do you plan to persue further data or computer science skills? What do you plan to do?
-```{r}
+
+```r
 # I plan on doing research and to integrate my newly formed knowledge in R to that in data science skills. 
 ```
 
 
 8. How important was working with a partner to your success in this class? If this class were transitioned to an online format, how do you think that would affect your understanding?
-```{r}
+
+```r
 # Working with a partner was a way for me to see the class concepts in a different manner. Due to how this class was based on a lab format I think having it in person was the better option, if it were online it would have been tougher.
 ```
 
 
 9. Did you complete the class evaluation? Please complete the class evaluation using the link provided in the announcements. Your feedback is very important and we appreciate your time.
-```{r}
+
+```r
 # yes.
 ```
 
